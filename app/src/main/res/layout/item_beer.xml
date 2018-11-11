@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="8dp">
+
+    <ImageView
+        android:id="@+id/ivBeerIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:src="@drawable/beer"
+        android:src="@drawable/beer"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/tvBeerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="BeerName"/>
+
+        <TextView
+            android:id="@+id/tvBeerStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="BeerStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+
+            <TextView
+                android:id="@+id/tvABV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="ABV"/>
+
+            <TextView
+                android:id="@+id/tvOG"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="OG"/>
+
+            <TextView
+                android:id="@+id/tvFG"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="FG"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
