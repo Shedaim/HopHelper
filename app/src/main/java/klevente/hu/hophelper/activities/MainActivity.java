@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.BeerAdapter;
 import klevente.hu.hophelper.data.HopHelperDatabase;
+import klevente.hu.hophelper.fragments.NewBeerDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,8 +41,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        fab.setOnClickListener((view) -> {
+            new NewBeerDialogFragment().show(getSupportFragmentManager(), NewBeerDialogFragment.TAG);
+        });
 
         database = Room.databaseBuilder(getApplicationContext(), HopHelperDatabase.class, "hophelper").build();
         initRecyclerView();

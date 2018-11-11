@@ -4,4 +4,12 @@
     <string name="abv">ABV</string>
     <string name="og">OG</string>
     <string name="fg">FG</string>
+    <string name="new_beer">New Beer</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="style">Style</string>
+    <string name="original_gravity">Original gravity</string>
+    <string name="final_gravity">Final gravity</string>
 </resources>
