@@ -1,5 +1,6 @@
 package klevente.hu.hophelper.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder
 
 
     private final List<Beer> items;
+    private Context context;
 
     public BeerAdapter() {
         items = new ArrayList<>();
@@ -29,6 +31,7 @@ public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder
     @NonNull
     @Override
     public BeerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_beer, parent, false);
         return new BeerViewHolder(itemView);
     }
@@ -38,9 +41,9 @@ public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder
         Beer item = items.get(position);
         holder.nameTextView.setText(item.name);
         holder.styleTextView.setText(item.style);
-        holder.abvTextView.setText(String.format(Locale.getDefault(), "%.1f", item.abv));
-        holder.ogTextView.setText(String.format(Locale.getDefault(), "%.3f", item.og));
-        holder.fgTextView.setText(String.format(Locale.getDefault(), "%.3f", item.fg));
+        holder.abvTextView.setText(String.format(Locale.getDefault(), "%s: %.1f%s", context.getString(R.string.abv), item.abv, "%"));
+        holder.ogTextView.setText(String.format(Locale.getDefault(), "%s: %.3f", context.getString(R.string.og), item.og));
+        holder.fgTextView.setText(String.format(Locale.getDefault(), "%s: %.3f", context.getString(R.string.fg), item.fg));
         holder.item = item;
     }
 
