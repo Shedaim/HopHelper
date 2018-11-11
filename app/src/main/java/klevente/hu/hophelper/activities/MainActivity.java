@@ -1,4 +1,4 @@
-package klevente.hu.hophelper;
+package klevente.hu.hophelper.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,10 +9,13 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import klevente.hu.hophelper.R;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
