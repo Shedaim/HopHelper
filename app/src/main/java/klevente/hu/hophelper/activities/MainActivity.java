@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         recyclerView = findViewById(R.id.MainRecyclerView);
-        adapter = new BeerAdapter();
+        adapter = new BeerAdapter(recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -40,13 +40,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
 
         database = Room.databaseBuilder(getApplicationContext(), HopHelperDatabase.class, "hophelper").build();
         initRecyclerView();

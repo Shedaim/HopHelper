@@ -2,6 +2,7 @@ package klevente.hu.hophelper.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "beer")
@@ -31,6 +32,7 @@ public class Beer {
 
     public Beer() {}
 
+    @Ignore
     public Beer(long id, String name, String description, String style, Double og, Double fg, Double abv) {
         this.id = id;
         this.name = name;
