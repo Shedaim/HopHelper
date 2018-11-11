@@ -5,9 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.data.Beer;
@@ -19,18 +22,26 @@ public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder
 
     public BeerAdapter() {
         items = new ArrayList<>();
+        items.add(new Beer(0, "Uradalmi Intro", "nagyon finom", "IPA", 1.041, 1.012, 5.2));
+        items.add(new Beer(1, "Ugar Stróman", "hazy af", "New England IPA", 1.053, 1.020, 5.6));
     }
 
     @NonNull
     @Override
-    public BeerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_beer, viewGroup, false);
+    public BeerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_beer, parent, false);
         return new BeerViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BeerViewHolder beerViewHolder, int i) {
-
+    public void onBindViewHolder(@NonNull BeerViewHolder holder, int position) {
+        Beer item = items.get(position);
+        holder.nameTextView.setText(item.name);
+        holder.styleTextView.setText(item.style);
+        holder.abvTextView.setText(String.format(Locale.getDefault(), "%.1f", item.abv));
+        holder.ogTextView.setText(String.format(Locale.getDefault(), "%.3f", item.og));
+        holder.fgTextView.setText(String.format(Locale.getDefault(), "%.3f", item.fg));
+        holder.item = item;
     }
 
     @Override
@@ -38,9 +49,30 @@ public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder
         return items.size();
     }
 
-    public class BeerViewHolder extends RecyclerView.ViewHolder {
-        public BeerViewHolder(@NonNull View itemView) {
+    public void addItem(Beer item) {
+        items.add(item);
+        notifyItemInserted(items.size()-1);
+    }
+
+    class BeerViewHolder extends RecyclerView.ViewHolder {
+        ImageView iconImageView;
+        TextView nameTextView;
+        TextView styleTextView;
+        TextView abvTextView;
+        TextView ogTextView;
+        TextView fgTextView;
+
+        Beer item;
+
+
+        BeerViewHolder(@NonNull View itemView) {
             super(itemView);
+            iconImageView = itemView.findViewById(R.id.ivBeerIcon);
+            nameTextView = itemView.findViewById(R.id.tvBeerName);
+            styleTextView = itemView.findViewById(R.id.tvBeerStyle);
+            abvTextView = itemView.findViewById(R.id.tvABV);
+            ogTextView = itemView.findViewById(R.id.tvOG);
+            fgTextView = itemView.findViewById(R.id.tvFG);
         }
     }
 }

@@ -21,11 +21,23 @@ public class Beer {
     public String style;
 
     @ColumnInfo(name = "og")
-    public double og;
+    public Double og;
 
     @ColumnInfo(name = "fg")
-    public double fg;
+    public Double fg;
 
     @ColumnInfo(name = "abv")
-    public double abv;
+    public Double abv;
+
+    public Beer() {}
+
+    public Beer(long id, String name, String description, String style, Double og, Double fg, Double abv) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.style = style;
+        this.og = og;
+        this.fg = fg;
+        this.abv = abv;
+    }
 }
