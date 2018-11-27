@@ -26,8 +26,8 @@ public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder
 
     public BeerAdapter(RecyclerView recyclerView) {
         items = new ArrayList<>();
-        items.add(new Beer(0, "Uradalmi Intro", "nagyon finom", "IPA", 1.041, 1.012, 5.2));
-        items.add(new Beer(1, "Ugar Stróman", "hazy af", "New England IPA", 1.053, 1.020, 5.6));
+        items.add(new Beer(0, "Uradalmi Intro", "nagyon finom", "IPA", 1041, 1012, 5.2));
+        items.add(new Beer(1, "Ugar Stróman", "hazy af", "New England IPA", 1053, 1020, 5.6));
 
 
         this.recyclerView = recyclerView;
@@ -51,8 +51,8 @@ public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder
         holder.nameTextView.setText(item.name);
         holder.styleTextView.setText(item.style);
         holder.abvTextView.setText(String.format(Locale.getDefault(), "%s: %.1f%s", context.getString(R.string.abv), item.abv, "%"));
-        holder.ogTextView.setText(String.format(Locale.getDefault(), "%s: %.3f", context.getString(R.string.og), item.og));
-        holder.fgTextView.setText(String.format(Locale.getDefault(), "%s: %.3f", context.getString(R.string.fg), item.fg));
+        holder.ogTextView.setText(String.format(Locale.getDefault(), "%s: %d", context.getString(R.string.og), item.og));
+        holder.fgTextView.setText(String.format(Locale.getDefault(), "%s: %d", context.getString(R.string.fg), item.fg));
         holder.item = item;
     }
 

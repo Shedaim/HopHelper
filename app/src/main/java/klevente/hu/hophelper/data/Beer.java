@@ -22,10 +22,10 @@ public class Beer {
     public String style;
 
     @ColumnInfo(name = "og")
-    public Double og;
+    public Integer og;
 
     @ColumnInfo(name = "fg")
-    public Double fg;
+    public Integer fg;
 
     @ColumnInfo(name = "abv")
     public Double abv;
@@ -33,7 +33,7 @@ public class Beer {
     public Beer() {}
 
     @Ignore
-    public Beer(long id, String name, String description, String style, Double og, Double fg, Double abv) {
+    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv) {
         this.id = id;
         this.name = name;
         this.description = description;
