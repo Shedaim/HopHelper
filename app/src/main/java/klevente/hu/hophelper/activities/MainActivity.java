@@ -1,14 +1,13 @@
 package klevente.hu.hophelper.activities;
 
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,7 +16,7 @@ import klevente.hu.hophelper.adapters.BeerAdapter;
 import klevente.hu.hophelper.data.HopHelperDatabase;
 import klevente.hu.hophelper.fragments.NewBeerDialogFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BeerAdapter.BeerAdapterListener {
 
     private RecyclerView recyclerView;
     private BeerAdapter adapter;
@@ -26,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         recyclerView = findViewById(R.id.MainRecyclerView);
-        adapter = new BeerAdapter(recyclerView);
+        adapter = new BeerAdapter(recyclerView, this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.beer_detail_toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -69,5 +68,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(int index) {
+        Intent intent = new Intent(MainActivity.this, BeerDetailActivity.class);
+        intent.putExtra("index", index);
+        startActivity(intent);
     }
 }
