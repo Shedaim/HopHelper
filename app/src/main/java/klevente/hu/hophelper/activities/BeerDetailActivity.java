@@ -52,7 +52,7 @@ public class BeerDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
-        beer = new BeerList().get(getIntent().getIntExtra("index", -1));
+        beer = BeerList.get(getIntent().getIntExtra("index", -1));
         toolbar.setTitle(beer.name);
 
     }

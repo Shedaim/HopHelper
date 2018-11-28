@@ -22,9 +22,6 @@ import klevente.hu.hophelper.data.BeerList;
 
 public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder> {
 
-
-    // private final List<Beer> items;
-    private final BeerList items;
     private RecyclerView recyclerView;
     private Context context;
 
@@ -36,9 +33,8 @@ public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder
 
     public BeerAdapter(RecyclerView recyclerView, @NonNull BeerAdapterListener listener) {
         this.listener = listener;
-        items = new BeerList();
-        items.add(new Beer(0, "Uradalmi Intro", "nagyon finom", "IPA", 1041, 1012, 5.2));
-        items.add(new Beer(1, "Ugar Stróman", "hazy af", "New England IPA", 1053, 1020, 5.6));
+        BeerList.add(new Beer(0, "Uradalmi Intro", "nagyon finom", "IPA", 1041, 1012, 5.2));
+        BeerList.add(new Beer(1, "Ugar Stróman", "hazy af", "New England IPA", 1053, 1020, 5.6));
 
 
         this.recyclerView = recyclerView;
@@ -60,7 +56,7 @@ public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull BeerViewHolder holder, int position) {
-        Beer item = items.get(position);
+        Beer item = BeerList.get(position);
         holder.nameTextView.setText(item.name);
         holder.styleTextView.setText(item.style);
         holder.abvTextView.setText(String.format(Locale.getDefault(), "%s: %.1f%s", context.getString(R.string.abv), item.abv, "%"));
@@ -71,12 +67,12 @@ public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return BeerList.size();
     }
 
     public void addItem(Beer item) {
-        items.add(item);
-        notifyItemInserted(items.size()-1);
+        BeerList.add(item);
+        notifyItemInserted(BeerList.size()-1);
     }
 
     class BeerViewHolder extends RecyclerView.ViewHolder {
