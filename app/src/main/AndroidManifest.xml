@@ -29,7 +29,7 @@
                 android:value="klevente.hu.hophelper.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".TestActivity"
+            android:name=".activities.TestActivity"
             android:label="@string/title_activity_test"
             android:theme="@style/AppTheme"></activity>
     </application>

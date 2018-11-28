@@ -13,10 +13,11 @@ import android.view.MenuItem;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.BeerAdapter;
+import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.HopHelperDatabase;
 import klevente.hu.hophelper.fragments.NewBeerDialogFragment;
 
-public class MainActivity extends AppCompatActivity implements BeerAdapter.BeerAdapterListener {
+public class MainActivity extends AppCompatActivity implements BeerAdapter.BeerAdapterListener, NewBeerDialogFragment.NewBeerDialogListener {
 
     private RecyclerView recyclerView;
     private BeerAdapter adapter;
@@ -75,5 +76,10 @@ public class MainActivity extends AppCompatActivity implements BeerAdapter.BeerA
         Intent intent = new Intent(MainActivity.this, BeerDetailActivity.class);
         intent.putExtra("index", index);
         startActivity(intent);
+    }
+
+    @Override
+    public void onNewBeerCreated(Beer beer) {
+        
     }
 }
