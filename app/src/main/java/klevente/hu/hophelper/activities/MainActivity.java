@@ -80,6 +80,6 @@ public class MainActivity extends AppCompatActivity implements BeerAdapter.BeerA
 
     @Override
     public void onNewBeerCreated(Beer beer) {
-        
+        adapter.addItem(beer);
     }
 }
