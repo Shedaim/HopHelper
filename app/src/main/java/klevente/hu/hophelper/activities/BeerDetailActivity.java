@@ -89,9 +89,9 @@ public class BeerDetailActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return BeerDetailIngrendientsFragment.newInstance(beer);
-                case 1: return BeerDetailsMashingFragment.newInstance(beer);
-                case 2: return BeerDetailsBoilingFragment.newInstance(beer);
+                case 0:  return BeerDetailIngrendientsFragment.newInstance(beer);
+                case 1:  return BeerDetailsMashingFragment.newInstance(beer);
+                case 2:  return BeerDetailsBoilingFragment.newInstance(beer);
                 default: return BeerDetailIngrendientsFragment.newInstance(beer);
             }
         }

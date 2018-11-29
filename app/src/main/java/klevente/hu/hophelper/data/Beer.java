@@ -35,6 +35,9 @@ public class Beer {
     @ColumnInfo(name = "abv")
     public Double abv;
 
+    @ColumnInfo(name = "batchsize")
+    public Double batchSize;
+
     @ColumnInfo(name = "malts")
     public Map<String, Double> malts = new HashMap<>();
 
@@ -50,7 +53,7 @@ public class Beer {
     public Beer() {}
 
     @Ignore
-    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv, Map<String, Double> malts, Map<String, Double> hops, Map<String, Double> extras, String yeast) {
+    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv, Double batchSize, Map<String, Double> malts, Map<String, Double> hops, Map<String, Double> extras, String yeast) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -58,9 +61,33 @@ public class Beer {
         this.og = og;
         this.fg = fg;
         this.abv = abv;
+        this.batchSize = batchSize;
         this.malts = malts;
         this.hops = hops;
         this.extras = extras;
         this.yeast = yeast;
+    }
+
+    @Ignore
+    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.style = style;
+        this.og = og;
+        this.fg = fg;
+        this.abv = abv;
+    }
+
+    public void addMalt(String name, Double quantity) {
+        malts.put(name, quantity);
+    }
+
+    public void addHop(String name, Double quantity) {
+        hops.put(name, quantity);
+    }
+
+    public void addExtra(String name, Double quantity) {
+        extras.put(name, quantity);
     }
 }

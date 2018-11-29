@@ -1,6 +1,7 @@
 package klevente.hu.hophelper.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BeerList {
@@ -40,5 +41,11 @@ public class BeerList {
         synchronized (list) {
             return list.remove(e);
         }
+    }
+
+    @Deprecated
+    public static void debugAddTestBeers() {
+        BeerList.add(new Beer(0, "Uradalmi Intro", "nagyon finom", "IPA", 1041, 1012, 5.2));
+        BeerList.add(new Beer(1, "Ugar Stróman", "hazy af", "New England IPA", 1053, 1020, 5.6));
     }
 }

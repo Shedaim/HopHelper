@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.BeerAdapter;
 import klevente.hu.hophelper.data.Beer;
+import klevente.hu.hophelper.data.BeerList;
 import klevente.hu.hophelper.data.HopHelperDatabase;
 import klevente.hu.hophelper.fragments.NewBeerDialogFragment;
 
@@ -32,6 +33,11 @@ public class MainActivity extends AppCompatActivity implements BeerAdapter.BeerA
         recyclerView.setAdapter(adapter);
     }
 
+    @Deprecated
+    private void debugInitData() {
+        BeerList.debugAddTestBeers();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -44,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements BeerAdapter.BeerA
         fab.setOnClickListener((view) -> {
             new NewBeerDialogFragment().show(getSupportFragmentManager(), NewBeerDialogFragment.TAG);
         });
+
+        debugInitData();
 
         database = Room.databaseBuilder(getApplicationContext(), HopHelperDatabase.class, "hophelper").build();
         initRecyclerView();
