@@ -4,6 +4,11 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.util.Pair;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Entity(tableName = "beer")
 public class Beer {
@@ -30,10 +35,22 @@ public class Beer {
     @ColumnInfo(name = "abv")
     public Double abv;
 
+    @ColumnInfo(name = "malts")
+    public Map<String, Double> malts = new HashMap<>();
+
+    @ColumnInfo(name = "hops")
+    public Map<String, Double> hops = new HashMap<>();
+
+    @ColumnInfo(name = "extras")
+    public Map<String, Double> extras = new HashMap<>();
+
+    @ColumnInfo(name = "yeast")
+    public String yeast;
+
     public Beer() {}
 
     @Ignore
-    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv) {
+    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv, Map<String, Double> malts, Map<String, Double> hops, Map<String, Double> extras, String yeast) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -41,5 +58,9 @@ public class Beer {
         this.og = og;
         this.fg = fg;
         this.abv = abv;
+        this.malts = malts;
+        this.hops = hops;
+        this.extras = extras;
+        this.yeast = yeast;
     }
 }
