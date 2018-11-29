@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements BeerAdapter.BeerA
     private HopHelperDatabase database;
 
     private void initRecyclerView() {
-        recyclerView = findViewById(R.id.MainRecyclerView);
+        recyclerView = findViewById(R.id.rvMain);
         adapter = new BeerAdapter(recyclerView, this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
