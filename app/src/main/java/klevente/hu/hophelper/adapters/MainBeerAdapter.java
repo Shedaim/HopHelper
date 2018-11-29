@@ -1,7 +1,6 @@
 package klevente.hu.hophelper.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,18 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import klevente.hu.hophelper.R;
-import klevente.hu.hophelper.activities.MainActivity;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 
-public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder> {
+public class MainBeerAdapter extends RecyclerView.Adapter<MainBeerAdapter.BeerViewHolder> {
 
     private RecyclerView recyclerView;
     private Context context;
@@ -31,7 +26,7 @@ public class BeerAdapter extends RecyclerView.Adapter<BeerAdapter.BeerViewHolder
 
     private BeerAdapterListener listener;
 
-    public BeerAdapter(RecyclerView recyclerView, @NonNull BeerAdapterListener listener) {
+    public MainBeerAdapter(RecyclerView recyclerView, @NonNull BeerAdapterListener listener) {
         this.listener = listener;
         this.recyclerView = recyclerView;
     }

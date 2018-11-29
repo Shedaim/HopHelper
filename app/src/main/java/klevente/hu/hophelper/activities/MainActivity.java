@@ -12,22 +12,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import klevente.hu.hophelper.R;
-import klevente.hu.hophelper.adapters.BeerAdapter;
+import klevente.hu.hophelper.adapters.MainBeerAdapter;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 import klevente.hu.hophelper.data.HopHelperDatabase;
 import klevente.hu.hophelper.fragments.NewBeerDialogFragment;
 
-public class MainActivity extends AppCompatActivity implements BeerAdapter.BeerAdapterListener, NewBeerDialogFragment.NewBeerDialogListener {
+public class MainActivity extends AppCompatActivity implements MainBeerAdapter.BeerAdapterListener, NewBeerDialogFragment.NewBeerDialogListener {
 
     private RecyclerView recyclerView;
-    private BeerAdapter adapter;
+    private MainBeerAdapter adapter;
 
     private HopHelperDatabase database;
 
     private void initRecyclerView() {
         recyclerView = findViewById(R.id.rvMain);
-        adapter = new BeerAdapter(recyclerView, this);
+        adapter = new MainBeerAdapter(recyclerView, this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
