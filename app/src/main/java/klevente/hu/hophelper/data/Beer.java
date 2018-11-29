@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.transform.dom.DOMLocator;
+
 @Entity(tableName = "beer")
 public class Beer {
 
@@ -89,5 +91,13 @@ public class Beer {
 
     public void addExtra(String name, Double quantity) {
         extras.put(name, quantity);
+    }
+
+    public Map<String, Double> getAllIngredients() {
+        Map<String, Double> ret = new HashMap<>(malts);
+        ret.putAll(extras);
+        ret.putAll(extras);
+
+        return ret;
     }
 }

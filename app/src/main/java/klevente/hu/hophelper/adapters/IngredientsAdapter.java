@@ -7,12 +7,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Map;
+
 import klevente.hu.hophelper.R;
+import klevente.hu.hophelper.data.Beer;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder> {
 
+    private Map<String, Double> ingredients;
+
     private RecyclerView recyclerView;
     private Context context;
+
+    public IngredientsAdapter(RecyclerView recyclerView, Beer beer) {
+        this.recyclerView = recyclerView;
+        ingredients = beer.getAllIngredients();
+    }
 
     @NonNull
     @Override
