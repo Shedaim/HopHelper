@@ -65,6 +65,9 @@ public class BeerDetailIngrendientsFragment extends Fragment {
         TextView tvBeerDescription = view.findViewById(R.id.tvBeerDetailDescription);
         tvBeerDescription.setText(beer.description);
 
+        TextView tvBeerYeast = view.findViewById(R.id.tvBeerDetailYeast);
+        tvBeerYeast.setText(beer.yeast);
+
         maltsRecyclerView = view.findViewById(R.id.rvMalts);
         maltsAdapter = new IngredientsAdapter(beer.malts);
         maltsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

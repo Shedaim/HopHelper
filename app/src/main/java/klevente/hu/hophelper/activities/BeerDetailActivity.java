@@ -59,6 +59,10 @@ public class BeerDetailActivity extends AppCompatActivity {
         fabStartMash = findViewById(R.id.fabBeerDetailStartMash);
         fabStartBoil = findViewById(R.id.fabBeerDetailStartBoil);
 
+        fabEdit.show();
+        fabStartMash.hide();
+        fabStartBoil.hide();
+
         beer = BeerList.get(getIntent().getIntExtra("index", -1));
         toolbar.setTitle(beer.name);
 
@@ -89,7 +93,7 @@ public class BeerDetailActivity extends AppCompatActivity {
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -114,6 +118,7 @@ public class BeerDetailActivity extends AppCompatActivity {
             case 0:
                 fabEdit.show();
                 fabStartMash.hide();
+                fabStartBoil.hide();
                 break;
             case 1:
                 fabStartMash.show();
@@ -122,6 +127,7 @@ public class BeerDetailActivity extends AppCompatActivity {
                 break;
             case 2:
                 fabStartBoil.show();
+                fabEdit.hide();
                 fabStartMash.hide();
                 break;
             default:
@@ -134,35 +140,23 @@ public class BeerDetailActivity extends AppCompatActivity {
 
     TabLayout.OnTabSelectedListener onTabSelectedListener = new TabLayout.OnTabSelectedListener() {
         @Override
-        public void onTabSelected(TabLayout.Tab tab) {
-            animateFab(tab.getPosition());
-        }
+        public void onTabSelected(TabLayout.Tab tab) { animateFab(tab.getPosition()); }
 
         @Override
-        public void onTabUnselected(TabLayout.Tab tab) {
-
-        }
+        public void onTabUnselected(TabLayout.Tab tab) {}
 
         @Override
-        public void onTabReselected(TabLayout.Tab tab) {
-
-        }
+        public void onTabReselected(TabLayout.Tab tab) {}
     };
 
     ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
-        public void onPageScrolled(int i, float v, int i1) {
-
-        }
+        public void onPageScrolled(int i, float v, int i1) {}
 
         @Override
-        public void onPageSelected(int i) {
-            animateFab(i);
-        }
+        public void onPageSelected(int i) { animateFab(i); }
 
         @Override
-        public void onPageScrollStateChanged(int i) {
-
-        }
+        public void onPageScrollStateChanged(int i) {}
     };
 }

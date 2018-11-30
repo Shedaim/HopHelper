@@ -51,9 +51,11 @@ public class Beer {
     @ColumnInfo(name = "yeast")
     public String yeast;
 
-    // public List<Pair<Integer, Integer>> mashingTimes = new ArrayList<>();
+    @ColumnInfo(name = "mash")
+    public List<Pair<Integer, Integer>> mashingTimes = new ArrayList<>();
 
-    // public List<Pair<String, Integer>>  boilingTimes = new ArrayList<>();
+    @ColumnInfo(name = "boil")
+    public List<Pair<String, Integer>>  boilingTimes = new ArrayList<>();
 
     public Beer() {}
 
@@ -94,13 +96,5 @@ public class Beer {
 
     public void addExtra(String name, Double quantity) {
         extras.put(name, quantity);
-    }
-
-    public Map<String, Double> getAllIngredients() {
-        Map<String, Double> ret = new HashMap<>(malts);
-        ret.putAll(hops);
-        ret.putAll(extras);
-
-        return ret;
     }
 }

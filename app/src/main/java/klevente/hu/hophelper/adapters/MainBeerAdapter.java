@@ -39,7 +39,6 @@ public class MainBeerAdapter extends RecyclerView.Adapter<MainBeerAdapter.BeerVi
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_beer, parent, false);
         itemView.setOnClickListener((view) -> {
             int itemPosition = recyclerView.getChildLayoutPosition(itemView);
-            // Toast.makeText(context, "" + itemPosition, Toast.LENGTH_LONG).show();
             listener.onItemClick(itemPosition);
 
         });
