@@ -14,9 +14,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import klevente.hu.hophelper.BeerDetailIngrendientsFragment;
-import klevente.hu.hophelper.BeerDetailsBoilingFragment;
-import klevente.hu.hophelper.BeerDetailsMashingFragment;
+import klevente.hu.hophelper.fragments.BeerDetailIngrendientsFragment;
+import klevente.hu.hophelper.fragments.BeerDetailsBoilingFragment;
+import klevente.hu.hophelper.fragments.BeerDetailsMashingFragment;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;

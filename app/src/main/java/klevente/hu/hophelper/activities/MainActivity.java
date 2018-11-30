@@ -15,7 +15,7 @@ import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.MainBeerAdapter;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
-import klevente.hu.hophelper.data.HopHelperDatabase;
+import klevente.hu.hophelper.database.HopHelperDatabase;
 import klevente.hu.hophelper.fragments.NewBeerDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements MainBeerAdapter.BeerAdapterListener, NewBeerDialogFragment.NewBeerDialogListener {

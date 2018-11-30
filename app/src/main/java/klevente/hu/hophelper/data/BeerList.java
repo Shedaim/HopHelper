@@ -45,7 +45,22 @@ public class BeerList {
 
     @Deprecated
     public static void debugAddTestBeers() {
-        BeerList.add(new Beer(0, "Uradalmi Intro", "nagyon finom", "IPA", 1041, 1012, 5.2));
-        BeerList.add(new Beer(1, "Ugar Stróman", "hazy af", "New England IPA", 1053, 1020, 5.6));
+        Beer beer1 = new Beer(0, "Uradalmi Intro", "nagyon finom", "IPA", 1041, 1012, 5.2);
+        beer1.addMalt("Pils", 3.0);
+        beer1.addMalt("Wheat", 0.5);
+        beer1.addMalt("Caramunich", 0.1);
+        beer1.addHop("Citra", 40.0);
+        beer1.addHop("Centennial", 10.0);
+        beer1.yeast = "Safale US-05";
+        BeerList.add(beer1);
+
+        Beer beer2 = new Beer(1, "Ugar Stróman", "hazy af", "New England IPA", 1053, 1020, 5.6);
+        beer2.addMalt("Pils", 3.0);
+        beer2.addMalt("Wheat", 0.5);
+        beer2.addMalt("Caramunich", 0.1);
+        beer2.addHop("Citra", 40.0);
+        beer2.addHop("Centennial", 10.0);
+        beer2.yeast = "Safale US-05";
+        BeerList.add(beer2);
     }
 }

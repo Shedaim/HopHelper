@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tvMaltName"
+        android:id="@+id/tvIngredientName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Malt type"/>
 
     <TextView
-        android:id="@+id/tvMaltQuantity"
+        android:id="@+id/tvIngredientQuantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="5 kg"/>

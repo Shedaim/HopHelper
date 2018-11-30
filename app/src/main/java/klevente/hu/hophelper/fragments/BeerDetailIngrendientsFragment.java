@@ -1,24 +1,33 @@
-package klevente.hu.hophelper;
+package klevente.hu.hophelper.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.Locale;
+import java.util.logging.Logger;
 
+import klevente.hu.hophelper.R;
+import klevente.hu.hophelper.adapters.IngredientsAdapter;
 import klevente.hu.hophelper.data.Beer;
 
 public class BeerDetailIngrendientsFragment extends Fragment {
 
-    private static final String TAG = "BeerDetailIngredientsFragment";
+    private static final String TAG = "BeerDetailIngredients";
 
     private Beer beer;
 
-    public BeerDetailIngrendientsFragment() {}
+    private RecyclerView recyclerView;
+    private IngredientsAdapter adapter;
+
+    public BeerDetailIngrendientsFragment() { super(); }
 
     public static BeerDetailIngrendientsFragment newInstance(Beer beer) {
         BeerDetailIngrendientsFragment fragment = new BeerDetailIngrendientsFragment();
@@ -52,6 +61,12 @@ public class BeerDetailIngrendientsFragment extends Fragment {
 
         TextView tvBeerDescription = view.findViewById(R.id.tvBeerDetailDescription);
         tvBeerDescription.setText(beer.description);
+
+        recyclerView = view.findViewById(R.id.rvIngredients);
+        adapter = new IngredientsAdapter(beer);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+
 
         return view;
     }

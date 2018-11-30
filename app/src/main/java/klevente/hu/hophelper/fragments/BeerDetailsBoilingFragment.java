@@ -1,4 +1,4 @@
-package klevente.hu.hophelper;
+package klevente.hu.hophelper.fragments;
 
 
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.data.Beer;
 
 public class BeerDetailsBoilingFragment extends Fragment {

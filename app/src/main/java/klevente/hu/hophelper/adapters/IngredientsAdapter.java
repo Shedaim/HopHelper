@@ -6,7 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import klevente.hu.hophelper.R;
@@ -14,14 +18,12 @@ import klevente.hu.hophelper.data.Beer;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder> {
 
-    private Map<String, Double> ingredients;
+    private List<Map.Entry<String, Double>> ingredients;
 
-    private RecyclerView recyclerView;
     private Context context;
 
-    public IngredientsAdapter(RecyclerView recyclerView, Beer beer) {
-        this.recyclerView = recyclerView;
-        ingredients = beer.getAllIngredients();
+    public IngredientsAdapter(Beer beer) {
+        ingredients = new ArrayList<>(beer.getAllIngredients().entrySet());
     }
 
     @NonNull
@@ -34,19 +36,27 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull IngredientViewHolder ingredientViewHolder, int position) {
+    public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
+        Map.Entry<String, Double> ingredient = ingredients.get(position);
+        holder.nameTextView.setText(ingredient.getKey());
+        holder.quantityTextView.setText(String.format(Locale.getDefault(), "%.1f %s", ingredient.getValue(), "kg"));
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return ingredients.size();
     }
 
     class IngredientViewHolder extends RecyclerView.ViewHolder {
 
-        public IngredientViewHolder(@NonNull View itemView) {
+        TextView nameTextView;
+        TextView quantityTextView;
+
+        IngredientViewHolder(@NonNull View itemView) {
             super(itemView);
+            nameTextView = itemView.findViewById(R.id.tvIngredientName);
+            quantityTextView = itemView.findViewById(R.id.tvIngredientQuantity);
         }
     }
 }

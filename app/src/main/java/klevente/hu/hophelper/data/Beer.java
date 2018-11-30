@@ -4,13 +4,9 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.util.Pair;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.xml.transform.dom.DOMLocator;
 
 @Entity(tableName = "beer")
 public class Beer {
@@ -95,7 +91,7 @@ public class Beer {
 
     public Map<String, Double> getAllIngredients() {
         Map<String, Double> ret = new HashMap<>(malts);
-        ret.putAll(extras);
+        ret.putAll(hops);
         ret.putAll(extras);
 
         return ret;
