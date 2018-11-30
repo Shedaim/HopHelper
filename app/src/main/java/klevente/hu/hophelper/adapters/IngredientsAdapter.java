@@ -14,7 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import klevente.hu.hophelper.R;
-import klevente.hu.hophelper.data.Beer;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder> {
 
@@ -22,8 +21,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     private Context context;
 
-    public IngredientsAdapter(Beer beer) {
-        ingredients = new ArrayList<>(beer.getAllIngredients().entrySet());
+    public IngredientsAdapter(Map<String, Double> ingredients) {
+        this.ingredients = new ArrayList<>(ingredients.entrySet());
     }
 
     @NonNull

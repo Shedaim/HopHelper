@@ -4,8 +4,11 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.util.Pair;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity(tableName = "beer")
@@ -47,6 +50,10 @@ public class Beer {
 
     @ColumnInfo(name = "yeast")
     public String yeast;
+
+    // public List<Pair<Integer, Integer>> mashingTimes = new ArrayList<>();
+
+    // public List<Pair<String, Integer>>  boilingTimes = new ArrayList<>();
 
     public Beer() {}
 
