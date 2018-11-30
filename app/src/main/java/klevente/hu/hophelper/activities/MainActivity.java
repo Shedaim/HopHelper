@@ -2,6 +2,7 @@ package klevente.hu.hophelper.activities;
 
 import android.arch.persistence.room.Room;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.List;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.MainBeerAdapter;
@@ -28,9 +31,10 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
     private void initRecyclerView() {
         recyclerView = findViewById(R.id.rvMain);
         adapter = new MainBeerAdapter(recyclerView, this);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        loadAllBeers();
+        debugInitData();
     }
 
     @Deprecated
@@ -51,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
             new NewBeerDialogFragment().show(getSupportFragmentManager(), NewBeerDialogFragment.TAG);
         });
 
-        debugInitData();
+
 
         database = Room.databaseBuilder(getApplicationContext(), HopHelperDatabase.class, "hophelper").build();
         initRecyclerView();
@@ -86,8 +90,37 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
         startActivity(intent);
     }
 
+    public void loadAllBeers() {
+        new AsyncTask<Void, Void, List<Beer>>() {
+            @Override
+            protected List<Beer> doInBackground(Void... voids) {
+                return database.beerDao().getAll();
+            }
+
+            @Override
+            protected void onPostExecute(List<Beer> beers) {
+                adapter.updateAll(beers);
+            }
+        }.execute();
+    }
+
     @Override
-    public void onNewBeerCreated(Beer beer) {
+    public void onNewBeerCreated(final Beer beer) {
+        new AsyncTask<Void, Void, Beer>() {
+            @Override
+            protected Beer doInBackground(Void... voids) {
+                database.beerDao().insert(beer);
+                List<Beer> all = database.beerDao().getAll();
+                Beer withId = all.get(all.size()-1);
+                return withId;
+            }
+
+            @Override
+            protected void onPostExecute(Beer beer) {
+                adapter.addItem(beer);
+            }
+        }.execute();
+
         adapter.addItem(beer);
     }
 }

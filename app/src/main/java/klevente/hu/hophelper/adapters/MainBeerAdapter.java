@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -59,6 +60,10 @@ public class MainBeerAdapter extends RecyclerView.Adapter<MainBeerAdapter.BeerVi
     @Override
     public int getItemCount() {
         return BeerList.size();
+    }
+
+    public void updateAll(List<Beer> beers) {
+        BeerList.setItems(beers);
     }
 
     public void addItem(Beer item) {
