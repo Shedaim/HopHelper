@@ -14,10 +14,11 @@ import java.util.Locale;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.data.Beer;
+import klevente.hu.hophelper.data.MashTime;
 
 public class MashingAdapter extends RecyclerView.Adapter<MashingAdapter.MashViewHolder> {
 
-    private List<Pair<Integer, Integer>> mashingTimes;
+    private List<MashTime> mashingTimes;
 
     private Context context;
 
@@ -35,9 +36,9 @@ public class MashingAdapter extends RecyclerView.Adapter<MashingAdapter.MashView
 
     @Override
     public void onBindViewHolder(@NonNull MashViewHolder holder, int position) {
-        Pair<Integer, Integer> pair = mashingTimes.get(position);
-        holder.timeTextView.setText(String.format(Locale.getDefault(), "%d min", pair.first));
-        holder.tempTextView.setText(String.format(Locale.getDefault(), "%d °C", pair.second));
+        MashTime time = mashingTimes.get(position);
+        holder.timeTextView.setText(String.format(Locale.getDefault(), "%d min", time.minutes));
+        holder.tempTextView.setText(String.format(Locale.getDefault(), "%d °C", time.temp));
     }
 
     @Override

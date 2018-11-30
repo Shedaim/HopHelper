@@ -52,6 +52,11 @@ public class BeerList {
         beer1.addHop("Citra", 40.0);
         beer1.addHop("Centennial", 10.0);
         beer1.yeast = "Safale US-05";
+        beer1.addMashTime(60, 55);
+        beer1.addMashTime(10, 62);
+        beer1.addMashTime(10, 72);
+        beer1.addBoilTime("Centennial", 20, 60);
+        beer1.addBoilTime("Citra", 10, 30);
         BeerList.add(beer1);
 
         Beer beer2 = new Beer(1, "Ugar Stróman", "hazy af", "New England IPA", 1053, 1020, 5.6);
@@ -61,6 +66,11 @@ public class BeerList {
         beer2.addHop("Citra", 40.0);
         beer2.addHop("Centennial", 10.0);
         beer2.yeast = "Safale US-05";
+        beer2.addMashTime(60, 55);
+        beer2.addMashTime(10, 62);
+        beer2.addMashTime(10, 72);
+        beer2.addBoilTime("Centennial", 20, 60);
+        beer2.addBoilTime("Citra", 10, 30);
         BeerList.add(beer2);
     }
 }

@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import klevente.hu.hophelper.data.HopAddition;
+import klevente.hu.hophelper.data.MashTime;
+
 public class Converters {
 
     @TypeConverter
@@ -31,32 +34,32 @@ public class Converters {
     }
 
     @TypeConverter
-    public static List<Pair<Integer, Integer>> stringToListOfIntegerInteger(String value) {
+    public static List<MashTime> stringToListOfMashTime(String value) {
         if (value == null) {
             return Collections.emptyList();
         }
 
-        Type listType = new TypeToken<ArrayList<Pair<Integer, Integer>>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<MashTime>>(){}.getType();
         return gson.fromJson(value, listType);
     }
 
     @TypeConverter
-    public static String listOfIntegerIntegerToString(List<Pair<Integer, Integer>> list) {
+    public static String listOfMashTimeToString(List<MashTime> list) {
         return gson.toJson(list);
     }
 
     @TypeConverter
-    public static List<Pair<String, Integer>> stringToListOfStringInteger(String value) {
+    public static List<HopAddition> stringToListHopAddition(String value) {
         if (value == null) {
             return Collections.emptyList();
         }
 
-        Type listType = new TypeToken<ArrayList<Pair<String, Integer>>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<HopAddition>>(){}.getType();
         return gson.fromJson(value, listType);
     }
 
     @TypeConverter
-    public static String listOfStringIntegerToString(List<Pair<String, Integer>> list) {
+    public static String listOfHopAdditionToString(List<HopAddition> list) {
         return gson.toJson(list);
     }
 

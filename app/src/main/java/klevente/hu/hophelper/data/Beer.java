@@ -52,10 +52,10 @@ public class Beer {
     public String yeast;
 
     @ColumnInfo(name = "mash")
-    public List<Pair<Integer, Integer>> mashingTimes = new ArrayList<>();
+    public List<MashTime> mashingTimes = new ArrayList<>();
 
     @ColumnInfo(name = "boil")
-    public List<Pair<String, Integer>>  boilingTimes = new ArrayList<>();
+    public List<HopAddition>  boilingTimes = new ArrayList<>();
 
     public Beer() {}
 
@@ -97,4 +97,8 @@ public class Beer {
     public void addExtra(String name, Double quantity) {
         extras.put(name, quantity);
     }
+
+    public void addMashTime(Integer minutes, Integer temp) { mashingTimes.add(new MashTime(minutes, temp)); }
+
+    public void addBoilTime(String hopName, Integer grams, Integer minutes) { boilingTimes.add(new HopAddition(hopName, grams, minutes)); }
 }
