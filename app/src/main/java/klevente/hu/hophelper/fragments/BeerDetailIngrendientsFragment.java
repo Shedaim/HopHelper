@@ -30,17 +30,12 @@ public class BeerDetailIngrendientsFragment extends Fragment {
     private IngredientsAdapter extrasAdapter;
 
 
-    public BeerDetailIngrendientsFragment() { super(); }
+    public BeerDetailIngrendientsFragment() {}
 
     public static BeerDetailIngrendientsFragment newInstance(Beer beer) {
         BeerDetailIngrendientsFragment fragment = new BeerDetailIngrendientsFragment();
         fragment.beer = beer;
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -82,7 +77,6 @@ public class BeerDetailIngrendientsFragment extends Fragment {
         extrasAdapter = new IngredientsAdapter(beer.extras);
         extrasRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         extrasRecyclerView.setAdapter(extrasAdapter);
-
 
         return view;
     }

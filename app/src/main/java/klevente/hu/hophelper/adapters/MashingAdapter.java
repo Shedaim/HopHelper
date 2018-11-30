@@ -1,33 +1,57 @@
 package klevente.hu.hophelper.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.List;
+import java.util.Locale;
+
+import klevente.hu.hophelper.R;
+import klevente.hu.hophelper.data.Beer;
 
 public class MashingAdapter extends RecyclerView.Adapter<MashingAdapter.MashViewHolder> {
 
+    private List<Pair<Integer, Integer>> mashingTimes;
+
+    private Context context;
+
+    public MashingAdapter(Beer beer) {
+        mashingTimes = beer.mashingTimes;
+    }
 
     @NonNull
     @Override
-    public MashViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        return null;
+    public MashViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
+        View itemView = LayoutInflater.from(context).inflate(R.layout.item_mash, parent, false);
+        return new MashViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MashViewHolder mashViewHolder, int position) {
-
+    public void onBindViewHolder(@NonNull MashViewHolder holder, int position) {
+        Pair<Integer, Integer> pair = mashingTimes.get(position);
+        holder.timeTextView.setText(String.format(Locale.getDefault(), "%d min", pair.first));
+        holder.tempTextView.setText(String.format(Locale.getDefault(), "%d °C", pair.second));
     }
 
     @Override
-    public int getItemCount() {
-        return 0;
-    }
+    public int getItemCount() { return mashingTimes.size(); }
 
     class MashViewHolder extends RecyclerView.ViewHolder {
 
-        public MashViewHolder(@NonNull View itemView) {
+        TextView timeTextView;
+        TextView tempTextView;
+
+        MashViewHolder(@NonNull View itemView) {
             super(itemView);
+            timeTextView = itemView.findViewById(R.id.tvMashTime);
+            tempTextView = itemView.findViewById(R.id.tvMashTemp);
         }
     }
 }
