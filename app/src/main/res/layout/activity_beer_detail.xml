@@ -71,11 +71,27 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/beer_detail_fab"
+        android:id="@+id/fabBeerDetailEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_edit_black_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabBeerDetailStartMash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_play_arrow_black_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabBeerDetailStartBoil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_play_arrow_black_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

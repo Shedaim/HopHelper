@@ -29,6 +29,10 @@ public class BeerDetailActivity extends AppCompatActivity {
 
     private Beer beer;
 
+    private FloatingActionButton fabEdit;
+    private FloatingActionButton fabStartMash;
+    private FloatingActionButton fabStartBoil;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,13 +48,16 @@ public class BeerDetailActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.beer_detail_tabs);
+        tabLayout.addOnTabSelectedListener(onTabSelectedListener);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
 
-        FloatingActionButton fab = findViewById(R.id.beer_detail_fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        viewPager.addOnPageChangeListener(onPageChangeListener);
+
+        fabEdit = findViewById(R.id.fabBeerDetailEdit);
+        fabStartMash = findViewById(R.id.fabBeerDetailStartMash);
+        fabStartBoil = findViewById(R.id.fabBeerDetailStartBoil);
 
         beer = BeerList.get(getIntent().getIntExtra("index", -1));
         toolbar.setTitle(beer.name);
@@ -101,4 +108,61 @@ public class BeerDetailActivity extends AppCompatActivity {
             return 3;
         }
     }
+
+    private void animateFab(int position) {
+        switch (position) {
+            case 0:
+                fabEdit.show();
+                fabStartMash.hide();
+                break;
+            case 1:
+                fabStartMash.show();
+                fabEdit.hide();
+                fabStartBoil.hide();
+                break;
+            case 2:
+                fabStartBoil.show();
+                fabStartMash.hide();
+                break;
+            default:
+                fabEdit.show();
+                fabStartMash.hide();
+                fabStartBoil.hide();
+                break;
+        }
+    }
+
+    TabLayout.OnTabSelectedListener onTabSelectedListener = new TabLayout.OnTabSelectedListener() {
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
+            animateFab(tab.getPosition());
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+
+        }
+    };
+
+    ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+            animateFab(i);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+
+        }
+    };
 }
