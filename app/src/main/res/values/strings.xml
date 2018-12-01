@@ -40,4 +40,16 @@
     <string name="beer_fg">Beer FG</string>
     <string name="beer_description">Beer description</string>
     <string name="batch_size">Batch size</string>
+    <string name="basic_info">Basic info</string>
+    <string name="beer_yeast">Yeast</string>
+    <string name="malt_name">Malt name</string>
+    <string name="beer_kg">kg</string>
+    <string name="add">Add</string>
+    <string name="hop_name">Hop name</string>
+    <string name="extra_name">Extra name</string>
+    <string name="beer_g">g</string>
+    <string name="mashing_temps">Mashing temps</string>
+    <string name="hop_additions">Hop additions</string>
+    <string name="beer_c">°C</string>
+    <string name="beer_min">min</string>
 </resources>

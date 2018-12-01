@@ -14,7 +14,6 @@ import android.view.MenuItem;
 
 import java.util.List;
 
-import klevente.hu.hophelper.NewBeerActivity;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.MainBeerAdapter;
 import klevente.hu.hophelper.data.Beer;

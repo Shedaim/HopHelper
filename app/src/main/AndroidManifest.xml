@@ -36,7 +36,7 @@
         <service android:name=".services.MashingCountdownService" />
 
         <activity
-            android:name=".NewBeerActivity"
+            android:name=".activities.NewBeerActivity"
             android:label="@string/title_activity_new_beer"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme">
