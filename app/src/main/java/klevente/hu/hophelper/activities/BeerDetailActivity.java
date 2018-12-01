@@ -1,5 +1,6 @@
 package klevente.hu.hophelper.activities;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,7 @@ import klevente.hu.hophelper.fragments.BeerDetailsMashingFragment;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
+import klevente.hu.hophelper.services.CountdownService;
 
 public class BeerDetailActivity extends AppCompatActivity {
 
@@ -28,6 +30,7 @@ public class BeerDetailActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
     private Beer beer;
+    private int beerIdx;
 
     private FloatingActionButton fabEdit;
     private FloatingActionButton fabStartMash;
@@ -55,15 +58,10 @@ public class BeerDetailActivity extends AppCompatActivity {
 
         viewPager.addOnPageChangeListener(onPageChangeListener);
 
-        fabEdit = findViewById(R.id.fabBeerDetailEdit);
-        fabStartMash = findViewById(R.id.fabBeerDetailStartMash);
-        fabStartBoil = findViewById(R.id.fabBeerDetailStartBoil);
+        initFabs();
 
-        fabEdit.show();
-        fabStartMash.hide();
-        fabStartBoil.hide();
-
-        beer = BeerList.get(getIntent().getIntExtra("index", -1));
+        beerIdx = getIntent().getIntExtra("index", -1);
+        beer = BeerList.get(beerIdx);
         toolbar.setTitle(beer.name);
 
     }
@@ -100,10 +98,10 @@ public class BeerDetailActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0:  return BeerDetailIngrendientsFragment.newInstance(beer);
-                case 1:  return BeerDetailsMashingFragment.newInstance(beer);
-                case 2:  return BeerDetailsBoilingFragment.newInstance(beer);
-                default: return BeerDetailIngrendientsFragment.newInstance(beer);
+                case 0:  return BeerDetailIngrendientsFragment.newInstance(beerIdx);
+                case 1:  return BeerDetailsMashingFragment.newInstance(beerIdx);
+                case 2:  return BeerDetailsBoilingFragment.newInstance(beerIdx);
+                default: return BeerDetailIngrendientsFragment.newInstance(beerIdx);
             }
         }
 
@@ -111,6 +109,22 @@ public class BeerDetailActivity extends AppCompatActivity {
         public int getCount() {
             return 3;
         }
+    }
+
+    private void initFabs() {
+        fabEdit = findViewById(R.id.fabBeerDetailEdit);
+        fabStartMash = findViewById(R.id.fabBeerDetailStartMash);
+        fabStartBoil = findViewById(R.id.fabBeerDetailStartBoil);
+
+        fabEdit.show();
+        fabStartMash.hide();
+        fabStartBoil.hide();
+
+        fabStartMash.setOnClickListener(v -> {
+            Intent intent = new Intent(BeerDetailActivity.this, CountdownService.class);
+            intent.putExtra("time", 30000);
+            startService(intent);
+        });
     }
 
     private void animateFab(int position) {

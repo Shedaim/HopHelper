@@ -32,6 +32,8 @@
             android:name=".activities.TestActivity"
             android:label="@string/title_activity_test"
             android:theme="@style/AppTheme"></activity>
+
+        <service android:name=".services.CountdownService" />
     </application>
 
 </manifest>

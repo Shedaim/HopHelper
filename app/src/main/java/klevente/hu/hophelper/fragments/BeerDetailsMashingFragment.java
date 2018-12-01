@@ -1,6 +1,8 @@
 package klevente.hu.hophelper.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,20 +13,30 @@ import android.view.ViewGroup;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.MashingAdapter;
 import klevente.hu.hophelper.data.Beer;
+import klevente.hu.hophelper.data.BeerList;
 
 public class BeerDetailsMashingFragment extends Fragment {
 
     private Beer beer;
+    private static final String BEER_IDX = "beer";
 
     private RecyclerView mashingRecyclerView;
     private MashingAdapter mashingAdapter;
 
     public BeerDetailsMashingFragment() {}
 
-    public static BeerDetailsMashingFragment newInstance(Beer beer) {
+    public static BeerDetailsMashingFragment newInstance(int index) {
         BeerDetailsMashingFragment fragment = new BeerDetailsMashingFragment();
-        fragment.beer = beer;
+        Bundle bundle = new Bundle(1);
+        bundle.putInt(BEER_IDX, index);
+        fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        beer = BeerList.get(getArguments().getInt(BEER_IDX));
     }
 
     @Override

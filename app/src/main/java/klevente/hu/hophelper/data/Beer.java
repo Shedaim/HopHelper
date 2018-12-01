@@ -4,7 +4,6 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +75,7 @@ public class Beer {
     }
 
     @Ignore
-    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv) {
+    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv, Double batchSize) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -84,6 +83,7 @@ public class Beer {
         this.og = og;
         this.fg = fg;
         this.abv = abv;
+        this.batchSize = batchSize;
     }
 
     public void addMalt(String name, Double quantity) {

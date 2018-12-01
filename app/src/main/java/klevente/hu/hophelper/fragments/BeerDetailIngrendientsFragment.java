@@ -2,6 +2,7 @@ package klevente.hu.hophelper.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +16,12 @@ import java.util.Locale;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.IngredientsAdapter;
 import klevente.hu.hophelper.data.Beer;
+import klevente.hu.hophelper.data.BeerList;
 
 public class BeerDetailIngrendientsFragment extends Fragment {
 
     private static final String TAG = "BeerDetailIngredients";
+    private static final String BEER_IDX = "beer";
 
     private Beer beer;
 
@@ -32,10 +35,18 @@ public class BeerDetailIngrendientsFragment extends Fragment {
 
     public BeerDetailIngrendientsFragment() {}
 
-    public static BeerDetailIngrendientsFragment newInstance(Beer beer) {
+    public static BeerDetailIngrendientsFragment newInstance(int index) {
         BeerDetailIngrendientsFragment fragment = new BeerDetailIngrendientsFragment();
-        fragment.beer = beer;
+        Bundle bundle = new Bundle(1);
+        bundle.putInt(BEER_IDX, index);
+        fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        beer = BeerList.get(getArguments().getInt(BEER_IDX));
     }
 
     @Override
