@@ -3,7 +3,6 @@ package klevente.hu.hophelper.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 import klevente.hu.hophelper.R;
+import klevente.hu.hophelper.constants.HourMinDateFormat;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.MashTime;
 
@@ -37,8 +37,8 @@ public class MashingAdapter extends RecyclerView.Adapter<MashingAdapter.MashView
     @Override
     public void onBindViewHolder(@NonNull MashViewHolder holder, int position) {
         MashTime time = mashingTimes.get(position);
-        holder.timeTextView.setText(String.format(Locale.getDefault(), "%d min", time.minutes));
-        holder.tempTextView.setText(String.format(Locale.getDefault(), "%d °C", time.temp));
+        holder.timeTextView.setText(context.getString(R.string.hourmin, HourMinDateFormat.format(time.millis)));
+        holder.tempTextView.setText(context.getString(R.string.celsius, time.temp));
     }
 
     @Override

@@ -68,7 +68,7 @@ public class MainBeerAdapter extends RecyclerView.Adapter<MainBeerAdapter.BeerVi
 
     public void addItem(Beer item) {
         BeerList.add(item);
-        notifyItemInserted(BeerList.size()-1);
+        notifyItemInserted(BeerList.size() - 1);
     }
 
     class BeerViewHolder extends RecyclerView.ViewHolder {

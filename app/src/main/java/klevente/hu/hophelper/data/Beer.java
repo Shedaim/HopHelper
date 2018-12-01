@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Entity(tableName = "beer")
 public class Beer {
@@ -86,19 +87,23 @@ public class Beer {
         this.batchSize = batchSize;
     }
 
-    public void addMalt(String name, Double quantity) {
+    public void addMalt(String name, double quantity) {
         malts.put(name, quantity);
     }
 
-    public void addHop(String name, Double quantity) {
+    public void addHop(String name, double quantity) {
         hops.put(name, quantity);
     }
 
-    public void addExtra(String name, Double quantity) {
+    public void addExtra(String name, double quantity) {
         extras.put(name, quantity);
     }
 
-    public void addMashTime(Integer minutes, Integer temp) { mashingTimes.add(new MashTime(minutes, temp)); }
+    public void addMashTimeMillis(long millis, int temp) { mashingTimes.add(new MashTime(millis, temp)); }
 
-    public void addBoilTime(String hopName, Integer grams, Integer minutes) { boilingTimes.add(new HopAddition(hopName, grams, minutes)); }
+    public void addMashTimeMinutes(int minutes, int temp) { mashingTimes.add(new MashTime(TimeUnit.MINUTES.toMillis(minutes), temp)); }
+
+    public void addBoilTimeMillis(String hopName, double grams, long millis) { boilingTimes.add(new HopAddition(hopName, grams, millis)); }
+
+    public void addBoilTimeMinutes(String hopName, double grams, int minutes) { boilingTimes.add(new HopAddition(hopName, grams, TimeUnit.MINUTES.toMillis(minutes))); }
 }

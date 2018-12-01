@@ -122,7 +122,7 @@ public class BeerDetailActivity extends AppCompatActivity {
 
         fabStartMash.setOnClickListener(v -> {
             Intent intent = new Intent(BeerDetailActivity.this, CountdownService.class);
-            intent.putExtra("time", 30000);
+            intent.putExtra(CountdownService.TIME_EXTRA, 30000);
             startService(intent);
         });
     }

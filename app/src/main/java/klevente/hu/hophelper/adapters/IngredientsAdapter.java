@@ -10,19 +10,21 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import klevente.hu.hophelper.R;
+import klevente.hu.hophelper.constants.Unit;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder> {
 
     private List<Map.Entry<String, Double>> ingredients;
+    private Unit unit;
 
     private Context context;
 
-    public IngredientsAdapter(Map<String, Double> ingredients) {
+    public IngredientsAdapter(Map<String, Double> ingredients, Unit unit) {
         this.ingredients = new ArrayList<>(ingredients.entrySet());
+        this.unit = unit;
     }
 
     @NonNull
@@ -38,7 +40,12 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
         Map.Entry<String, Double> ingredient = ingredients.get(position);
         holder.nameTextView.setText(ingredient.getKey());
-        holder.quantityTextView.setText(String.format(Locale.getDefault(), "%.1f %s", ingredient.getValue(), "kg"));
+        switch (unit) {
+            case KG: holder.quantityTextView.setText(context.getString(R.string.kg, ingredient.getValue())); break;
+            case G:  holder.quantityTextView.setText(context.getString(R.string.g, ingredient.getValue())); break;
+            default: holder.quantityTextView.setText(context.getString(R.string.kg, ingredient.getValue())); break;
+        }
+
 
     }
 

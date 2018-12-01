@@ -4,6 +4,7 @@
     <string name="abv">ABV: %1$.1f%%</string>
     <string name="og">OG: %1$d</string>
     <string name="fg">FG: %1$d</string>
+    <string name="yeast">Yeast: %1$s</string>
     <string name="new_beer">New Beer</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -22,4 +23,9 @@
     <string name="hops">Hops</string>
     <string name="extras">Extras</string>
     <string name="export">Export</string>
+
+    <string name="kg">%1$.1f kg</string>
+    <string name="g">%1$.0f g</string>
+    <string name="hourmin">%1$s</string>
+    <string name="celsius">%1$d °C</string>
 </resources>

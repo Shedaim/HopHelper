@@ -15,6 +15,7 @@ import java.util.Locale;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.IngredientsAdapter;
+import klevente.hu.hophelper.constants.Unit;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 
@@ -72,20 +73,20 @@ public class BeerDetailIngrendientsFragment extends Fragment {
         tvBeerDescription.setText(beer.description);
 
         TextView tvBeerYeast = view.findViewById(R.id.tvBeerDetailYeast);
-        tvBeerYeast.setText(beer.yeast);
+        tvBeerYeast.setText(view.getContext().getString(R.string.yeast, beer.yeast));
 
         maltsRecyclerView = view.findViewById(R.id.rvMalts);
-        maltsAdapter = new IngredientsAdapter(beer.malts);
+        maltsAdapter = new IngredientsAdapter(beer.malts, Unit.KG);
         maltsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         maltsRecyclerView.setAdapter(maltsAdapter);
 
         hopsRecyclerView = view.findViewById(R.id.rvHops);
-        hopsAdapter = new IngredientsAdapter(beer.hops);
+        hopsAdapter = new IngredientsAdapter(beer.hops, Unit.G);
         hopsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         hopsRecyclerView.setAdapter(hopsAdapter);
 
         extrasRecyclerView = view.findViewById(R.id.rvExtras);
-        extrasAdapter = new IngredientsAdapter(beer.extras);
+        extrasAdapter = new IngredientsAdapter(beer.extras, Unit.G);
         extrasRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         extrasRecyclerView.setAdapter(extrasAdapter);
 

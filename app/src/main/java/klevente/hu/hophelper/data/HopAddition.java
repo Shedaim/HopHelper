@@ -2,12 +2,12 @@ package klevente.hu.hophelper.data;
 
 public class HopAddition {
     public String name;
-    public Integer grams;
-    public Integer minutes;
+    public double grams;
+    public long millis;
 
-    public HopAddition(String name, Integer grams, Integer minutes) {
+    public HopAddition(String name, double grams, long millis) {
         this.name = name;
         this.grams = grams;
-        this.minutes = minutes;
+        this.millis = millis;
     }
 }

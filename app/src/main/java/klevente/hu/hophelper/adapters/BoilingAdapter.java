@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 import klevente.hu.hophelper.R;
+import klevente.hu.hophelper.constants.HourMinDateFormat;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.HopAddition;
 
@@ -37,8 +38,8 @@ public class BoilingAdapter extends RecyclerView.Adapter<BoilingAdapter.BoilView
     public void onBindViewHolder(@NonNull BoilViewHolder holder, int position) {
         HopAddition addition = hopAdditions.get(position);
         holder.nameTextView.setText(addition.name);
-        holder.quantityTextView.setText(String.format(Locale.getDefault(), "%d g", addition.grams));
-        holder.timeTextView.setText(String.format(Locale.getDefault(), "%d min", addition.minutes));
+        holder.quantityTextView.setText(context.getString(R.string.g, addition.grams));
+        holder.timeTextView.setText(context.getString(R.string.hourmin, HourMinDateFormat.format(addition.millis)));
     }
 
     @Override

@@ -11,14 +11,20 @@ import android.support.annotation.Nullable;
 
 import com.ankushgrover.hourglass.Hourglass;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.activities.BeerDetailActivity;
 import klevente.hu.hophelper.activities.MainActivity;
 
 public class CountdownService extends Service {
+    public static final String TIME_EXTRA = "time";
+
     private static final int NOTIF_ID = 480;
+    private static SimpleDateFormat sdf = new SimpleDateFormat("h:mm", Locale.getDefault());
 
     public interface CountdownServiceListener {
         void onTick(long millisUntilFinished);
@@ -34,7 +40,7 @@ public class CountdownService extends Service {
 
         @Override
         public void onTimerTick(long timeRemaining) {
-            updateNotification(String.valueOf(timeRemaining));
+            updateNotification(sdf.format(new Date(timeRemaining)));
         }
 
         @Override
@@ -44,15 +50,15 @@ public class CountdownService extends Service {
     }
 
 
-    private int startTime;
+    private long startTime;
     private String title;
     private TimerHourglass hourglass;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startTime = intent.getIntExtra("time", 0);
+        startTime = TimeUnit.MINUTES.toMillis(intent.getIntExtra(TIME_EXTRA, 0));
 
-        startForeground(NOTIF_ID, getNotification(String.valueOf(startTime)));
+        startForeground(NOTIF_ID, getNotification(sdf.format(new Date(startTime))));
 
         hourglass = new TimerHourglass(startTime);
         hourglass.startTimer();
