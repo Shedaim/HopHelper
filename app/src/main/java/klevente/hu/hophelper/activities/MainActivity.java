@@ -14,14 +14,14 @@ import android.view.MenuItem;
 
 import java.util.List;
 
+import klevente.hu.hophelper.NewBeerActivity;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.MainBeerAdapter;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 import klevente.hu.hophelper.database.HopHelperDatabase;
-import klevente.hu.hophelper.fragments.NewBeerDialogFragment;
 
-public class MainActivity extends AppCompatActivity implements MainBeerAdapter.BeerAdapterListener, NewBeerDialogFragment.NewBeerDialogListener {
+public class MainActivity extends AppCompatActivity implements MainBeerAdapter.BeerAdapterListener {
 
     private RecyclerView recyclerView;
     private MainBeerAdapter adapter;
@@ -50,9 +50,10 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
         Toolbar toolbar = findViewById(R.id.beer_detail_toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fabNewBeerDone);
         fab.setOnClickListener((view) -> {
-            new NewBeerDialogFragment().show(getSupportFragmentManager(), NewBeerDialogFragment.TAG);
+            Intent intent = new Intent(MainActivity.this, NewBeerActivity.class);
+            startActivity(intent);
         });
 
 
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
         }.execute();
     }
 
-    @Override
+
     public void onNewBeerCreated(final Beer beer) {
         new AsyncTask<Void, Void, Beer>() {
             @Override

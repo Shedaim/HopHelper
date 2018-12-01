@@ -1,6 +1,6 @@
 package klevente.hu.hophelper.fragments;
 
-import android.app.AlertDialog;
+/*import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -95,4 +95,4 @@ public class NewBeerDialogFragment extends DialogFragment {
 
         return item;
     }
-}
+}*/

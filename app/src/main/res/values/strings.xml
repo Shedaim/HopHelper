@@ -28,4 +28,16 @@
     <string name="g">%1$.0f g</string>
     <string name="hourmin">%1$s</string>
     <string name="celsius">%1$d °C</string>
+    <string name="title_activity_new_beer">Add new beer</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="beer_name">Beer name</string>
+    <string name="beer_style">Beer style</string>
+    <string name="beer_abv">Beer ABV</string>
+    <string name="beer_og">Beer OG</string>
+    <string name="beer_fg">Beer FG</string>
+    <string name="beer_description">Beer description</string>
+    <string name="batch_size">Batch size</string>
 </resources>

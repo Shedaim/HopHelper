@@ -3,7 +3,6 @@ package klevente.hu.hophelper.activities;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -21,9 +20,11 @@ import klevente.hu.hophelper.fragments.BeerDetailsMashingFragment;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
-import klevente.hu.hophelper.services.CountdownService;
+import klevente.hu.hophelper.services.MashingCountdownService;
 
 public class BeerDetailActivity extends AppCompatActivity {
+
+    public static final String BEER_INDEX = "index";
 
     private SectionsPagerAdapter sectionsPagerAdapter;
 
@@ -60,7 +61,7 @@ public class BeerDetailActivity extends AppCompatActivity {
 
         initFabs();
 
-        beerIdx = getIntent().getIntExtra("index", -1);
+        beerIdx = getIntent().getIntExtra(BEER_INDEX, -1);
         beer = BeerList.get(beerIdx);
         toolbar.setTitle(beer.name);
 
@@ -121,8 +122,8 @@ public class BeerDetailActivity extends AppCompatActivity {
         fabStartBoil.hide();
 
         fabStartMash.setOnClickListener(v -> {
-            Intent intent = new Intent(BeerDetailActivity.this, CountdownService.class);
-            intent.putExtra(CountdownService.TIME_EXTRA, 30000);
+            Intent intent = new Intent(BeerDetailActivity.this, MashingCountdownService.class);
+            intent.putExtra(MashingCountdownService.BEER_INDEX, beerIdx);
             startService(intent);
         });
     }

@@ -31,9 +31,19 @@
         <activity
             android:name=".activities.TestActivity"
             android:label="@string/title_activity_test"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
 
-        <service android:name=".services.CountdownService" />
+        <service android:name=".services.MashingCountdownService" />
+
+        <activity
+            android:name=".NewBeerActivity"
+            android:label="@string/title_activity_new_beer"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="klevente.hu.hophelper.activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
