@@ -51,9 +51,9 @@ public class MainBeerAdapter extends RecyclerView.Adapter<MainBeerAdapter.BeerVi
         Beer item = BeerList.get(position);
         holder.nameTextView.setText(item.name);
         holder.styleTextView.setText(item.style);
-        holder.abvTextView.setText(String.format(Locale.getDefault(), "%s: %.1f%s", context.getString(R.string.abv), item.abv, "%"));
-        holder.ogTextView.setText(String.format(Locale.getDefault(), "%s: %d", context.getString(R.string.og), item.og));
-        holder.fgTextView.setText(String.format(Locale.getDefault(), "%s: %d", context.getString(R.string.fg), item.fg));
+        holder.abvTextView.setText(context.getString(R.string.abv, item.abv));
+        holder.ogTextView.setText(context.getString(R.string.og, item.og));
+        holder.fgTextView.setText(context.getString(R.string.fg, item.fg));
         holder.item = item;
     }
 

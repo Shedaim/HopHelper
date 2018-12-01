@@ -60,13 +60,13 @@ public class BeerDetailIngrendientsFragment extends Fragment {
         tvBeerStyle.setText(beer.style);
 
         TextView tvBeerABV = view.findViewById(R.id.tvBeerDetailABV);
-        tvBeerABV.setText(String.format(Locale.getDefault(), "%s: %.1f%s", view.getContext().getString(R.string.abv), beer.abv, "%"));
+        tvBeerABV.setText(view.getContext().getString(R.string.abv, beer.abv));
 
         TextView tvBeerOG = view.findViewById(R.id.tvBeerDetailOG);
-        tvBeerOG.setText(String.format(Locale.getDefault(), "%s: %d", view.getContext().getString(R.string.og), beer.og));
+        tvBeerOG.setText(view.getContext().getString(R.string.og, beer.og));
 
         TextView tvBeerFG = view.findViewById(R.id.tvBeerDetailFG);
-        tvBeerFG.setText(String.format(Locale.getDefault(), "%s: %d", view.getContext().getString(R.string.fg), beer.fg));
+        tvBeerFG.setText(view.getContext().getString(R.string.fg, beer.fg));
 
         TextView tvBeerDescription = view.findViewById(R.id.tvBeerDetailDescription);
         tvBeerDescription.setText(beer.description);
