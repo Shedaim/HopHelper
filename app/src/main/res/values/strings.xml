@@ -54,5 +54,9 @@
     <string name="beer_min">min</string>
     <string name="must_not_be_empty">Must not be empty!</string>
     <string name="at_least_one_element">Must be at least one element in list!</string>
-    <string name="mashing_at">Mashing at</string>
+    <string name="mashing_at">Mashing at %1$d °C: %2$s</string>
+    <string name="boiling_for">Boiling %1$.0f g of %2$s for: %3$s</string>
+    <string name="select_folder">Select folder</string>
+    <string name="file_created">File created</string>
+    <string name="unable">Unable</string>
 </resources>

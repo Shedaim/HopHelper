@@ -37,6 +37,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.ankushgrover:Hourglass:2.0.0'
     implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation'com.google.android.gms:play-services-auth:16.0.1'
+    implementation 'com.google.android.gms:play-services-drive:16.0.0'
 
 
 }

@@ -36,7 +36,7 @@ public class BoilingCountdownService extends Service {
 
         @Override
         public void onTimerTick(long timeRemaining) {
-            updateNotification("Boiling " + getString(R.string.g, grams) + " of " + name + " for: " + MinSecondDateFormat.format(timeRemaining));
+            updateNotification(getString(R.string.boiling_for, grams, name, MinSecondDateFormat.format(timeRemaining)));
         }
 
         @Override

@@ -34,7 +34,7 @@ public class MashingCountdownService extends Service {
 
         @Override
         public void onTimerTick(long timeRemaining) {
-            updateNotification(getString(R.string.mashing_at)  + getString(R.string.celsius, temp) + ": " + MinSecondDateFormat.format(timeRemaining));
+            updateNotification(getString(R.string.mashing_at, temp, MinSecondDateFormat.format(timeRemaining)));
         }
 
         @Override
