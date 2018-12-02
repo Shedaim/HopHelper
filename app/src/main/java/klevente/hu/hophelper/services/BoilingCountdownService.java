@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -18,23 +19,24 @@ import klevente.hu.hophelper.activities.BeerDetailActivity;
 import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
-import klevente.hu.hophelper.data.MashTime;
+import klevente.hu.hophelper.data.HopAddition;
 
-public class MashingCountdownService extends Service {
+public class BoilingCountdownService extends Service {
     public static final String BEER_INDEX = "index";
+    private static final int NOTIF_ID = 190;
 
-    private static final int NOTIF_ID = 480;
-
-    private class TimerHourglass extends Hourglass {
-        private int temp;
-        TimerHourglass(MashTime time) {
-            super(time.millis, 1000);
-            this.temp = time.temp;
+    private class TimerHourGlass extends Hourglass {
+        private double grams;
+        private String name;
+        TimerHourGlass(HopAddition addition) {
+            super(addition.millis, 1000);
+            this.grams = addition.grams;
+            this.name = addition.name;
         }
 
         @Override
         public void onTimerTick(long timeRemaining) {
-            updateNotification(getString(R.string.mashing_at)  + getString(R.string.celsius, temp) + ": " + MinSecondDateFormat.format(timeRemaining));
+            updateNotification("Boiling " + getString(R.string.g, grams) + " of " + name + " for: " + MinSecondDateFormat.format(timeRemaining));
         }
 
         @Override
@@ -48,24 +50,22 @@ public class MashingCountdownService extends Service {
         }
     }
 
-
     private int beerIdx;
     private Beer beer;
-    private List<TimerHourglass> timers;
+    private List<TimerHourGlass> timers;
     private int timerIndex = 0;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         beerIdx = intent.getIntExtra(BEER_INDEX, -1);
         beer = BeerList.get(beerIdx);
-        timers = new ArrayList<>(beer.mashingTimes.size());
-        for (MashTime m : beer.mashingTimes) {
-            timers.add(new TimerHourglass(m));
+        timers = new ArrayList<>(beer.boilingTimes.size());
+        for (HopAddition h : beer.boilingTimes) {
+            timers.add(new TimerHourGlass(h));
         }
 
         timers.get(timerIndex).startTimer();
         startForeground(NOTIF_ID, getNotification("Timer start..."));
-
         return START_STICKY;
     }
 
@@ -79,7 +79,6 @@ public class MashingCountdownService extends Service {
         Intent notifIntent = new Intent(this, BeerDetailActivity.class);
         notifIntent.putExtra(BEER_INDEX, beerIdx);
         PendingIntent contentIntent = PendingIntent.getActivity(this, NOTIF_ID, notifIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
         return new Notification.Builder(this).
                 setContentTitle(beer.name).
                 setContentText(msg).

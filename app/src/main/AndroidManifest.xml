@@ -30,6 +30,7 @@
         </activity>
 
         <service android:name=".services.MashingCountdownService" />
+        <service android:name=".services.BoilingCountdownService" />
 
         <activity
             android:name=".activities.NewBeerActivity"

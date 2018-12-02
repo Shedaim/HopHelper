@@ -20,6 +20,7 @@ import klevente.hu.hophelper.fragments.BeerDetailsMashingFragment;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
+import klevente.hu.hophelper.services.BoilingCountdownService;
 import klevente.hu.hophelper.services.MashingCountdownService;
 
 public class BeerDetailActivity extends AppCompatActivity {
@@ -124,6 +125,12 @@ public class BeerDetailActivity extends AppCompatActivity {
         fabStartMash.setOnClickListener(v -> {
             Intent intent = new Intent(BeerDetailActivity.this, MashingCountdownService.class);
             intent.putExtra(MashingCountdownService.BEER_INDEX, beerIdx);
+            startService(intent);
+        });
+
+        fabStartBoil.setOnClickListener(v -> {
+            Intent intent = new Intent(BeerDetailActivity.this, BoilingCountdownService.class);
+            intent.putExtra(BoilingCountdownService.BEER_INDEX, beerIdx);
             startService(intent);
         });
     }
