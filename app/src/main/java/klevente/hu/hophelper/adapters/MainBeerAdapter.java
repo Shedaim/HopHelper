@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.data.Beer;

@@ -25,13 +25,12 @@ import klevente.hu.hophelper.database.HopHelperDatabase;
 public class MainActivity extends AppCompatActivity implements MainBeerAdapter.BeerAdapterListener {
     public static final int ADD_NEW_BEER = 100;
 
-    private RecyclerView recyclerView;
     private MainBeerAdapter adapter;
 
     private HopHelperDatabase database;
 
     private void initRecyclerView() {
-        recyclerView = findViewById(R.id.rvMain);
+        RecyclerView recyclerView = findViewById(R.id.rvMain);
         adapter = new MainBeerAdapter(recyclerView, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);

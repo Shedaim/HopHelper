@@ -59,4 +59,11 @@
     <string name="select_folder">Select folder</string>
     <string name="file_created">File created</string>
     <string name="unable">Unable</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="not_implemented">Not implemented</string>
+    <string name="title_activity_mashing_count_down">MashingCountDownActivity</string>
+    <string name="mashing_countdown">Mashing...</string>
+    <string name="paused">paused</string>
+    <string name="title_activity_boiling_count_down">BoilingCountDownActivity</string>
+    <string name="boiling_countdown">Boiling...</string>
 </resources>

@@ -20,9 +20,6 @@ public class BeerDetailsBoilingFragment extends Fragment {
     private Beer beer;
     private static final String BEER_IDX = "beer";
 
-    private RecyclerView boilingRecyclerView;
-    private BoilingAdapter boilingAdapter;
-
     public BeerDetailsBoilingFragment() {}
 
     public static BeerDetailsBoilingFragment newInstance(int index) {
@@ -43,8 +40,8 @@ public class BeerDetailsBoilingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_beer_details_boiling, container, false);
 
-        boilingRecyclerView = view.findViewById(R.id.rvBoiling);
-        boilingAdapter = new BoilingAdapter(beer);
+        RecyclerView boilingRecyclerView = view.findViewById(R.id.rvBoiling);
+        BoilingAdapter boilingAdapter = new BoilingAdapter(beer);
         boilingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         boilingRecyclerView.setAdapter(boilingAdapter);
 

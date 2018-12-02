@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Locale;
-
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.IngredientsAdapter;
 import klevente.hu.hophelper.constants.Unit;
@@ -25,13 +23,6 @@ public class BeerDetailIngrendientsFragment extends Fragment {
     private static final String BEER_IDX = "beer";
 
     private Beer beer;
-
-    private RecyclerView maltsRecyclerView;
-    private RecyclerView hopsRecyclerView;
-    private RecyclerView extrasRecyclerView;
-    private IngredientsAdapter maltsAdapter;
-    private IngredientsAdapter hopsAdapter;
-    private IngredientsAdapter extrasAdapter;
 
 
     public BeerDetailIngrendientsFragment() {}
@@ -75,18 +66,18 @@ public class BeerDetailIngrendientsFragment extends Fragment {
         TextView tvBeerYeast = view.findViewById(R.id.tvBeerDetailYeast);
         tvBeerYeast.setText(view.getContext().getString(R.string.yeast, beer.yeast));
 
-        maltsRecyclerView = view.findViewById(R.id.rvMalts);
-        maltsAdapter = new IngredientsAdapter(beer.malts, Unit.KG);
+        RecyclerView maltsRecyclerView = view.findViewById(R.id.rvMalts);
+        IngredientsAdapter maltsAdapter = new IngredientsAdapter(beer.malts, Unit.KG);
         maltsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         maltsRecyclerView.setAdapter(maltsAdapter);
 
-        hopsRecyclerView = view.findViewById(R.id.rvHops);
-        hopsAdapter = new IngredientsAdapter(beer.hops, Unit.G);
+        RecyclerView hopsRecyclerView = view.findViewById(R.id.rvHops);
+        IngredientsAdapter hopsAdapter = new IngredientsAdapter(beer.hops, Unit.G);
         hopsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         hopsRecyclerView.setAdapter(hopsAdapter);
 
-        extrasRecyclerView = view.findViewById(R.id.rvExtras);
-        extrasAdapter = new IngredientsAdapter(beer.extras, Unit.G);
+        RecyclerView extrasRecyclerView = view.findViewById(R.id.rvExtras);
+        IngredientsAdapter extrasAdapter = new IngredientsAdapter(beer.extras, Unit.G);
         extrasRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         extrasRecyclerView.setAdapter(extrasAdapter);
 

@@ -1,7 +1,6 @@
 package klevente.hu.hophelper.database;
 
 import android.arch.persistence.room.TypeConverter;
-import android.util.Pair;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -1,7 +1,6 @@
 package klevente.hu.hophelper.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,9 +18,6 @@ public class BeerDetailsMashingFragment extends Fragment {
 
     private Beer beer;
     private static final String BEER_IDX = "beer";
-
-    private RecyclerView mashingRecyclerView;
-    private MashingAdapter mashingAdapter;
 
     public BeerDetailsMashingFragment() {}
 
@@ -43,8 +39,8 @@ public class BeerDetailsMashingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_beer_details_mashing, container, false);
 
-        mashingRecyclerView = view.findViewById(R.id.rvMashing);
-        mashingAdapter = new MashingAdapter(beer);
+        RecyclerView mashingRecyclerView = view.findViewById(R.id.rvMashing);
+        MashingAdapter mashingAdapter = new MashingAdapter(beer);
         mashingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mashingRecyclerView.setAdapter(mashingAdapter);
 

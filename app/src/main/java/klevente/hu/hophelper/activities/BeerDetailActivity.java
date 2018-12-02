@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -37,12 +36,10 @@ import com.google.android.gms.drive.query.SearchableField;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.android.gms.tasks.Tasks;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.HashSet;
 import java.util.Map;
@@ -65,11 +62,6 @@ public class BeerDetailActivity extends AppCompatActivity {
     public static final String BEER_INDEX = "index";
     private static final int REQUEST_CODE_SIGN_IN = 0;
     private static final int REQUEST_CODE_OPEN_ITEM = 1;
-    private static final int REQUEST_CODE_CREATE_FILE = 2;
-
-    private SectionsPagerAdapter sectionsPagerAdapter;
-
-    private ViewPager viewPager;
 
     private Beer beer;
     private int beerIdx;
@@ -97,9 +89,9 @@ public class BeerDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        viewPager = findViewById(R.id.beer_detail_container);
+        ViewPager viewPager = findViewById(R.id.beer_detail_container);
         viewPager.setAdapter(sectionsPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.beer_detail_tabs);
@@ -307,16 +299,28 @@ public class BeerDetailActivity extends AppCompatActivity {
         fabStartMash.hide();
         fabStartBoil.hide();
 
+        fabEdit.setOnClickListener(v -> Snackbar.make(v, R.string.not_implemented, Snackbar.LENGTH_SHORT));
+
         fabStartMash.setOnClickListener(v -> {
             Intent intent = new Intent(BeerDetailActivity.this, MashingCountdownService.class);
             intent.putExtra(MashingCountdownService.BEER_INDEX, beerIdx);
             startService(intent);
+
+            Intent intent1 = new Intent(BeerDetailActivity.this, MashingCountDownActivity.class);
+            intent1.putExtra(BEER_INDEX, beerIdx);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent1);
         });
 
         fabStartBoil.setOnClickListener(v -> {
             Intent intent = new Intent(BeerDetailActivity.this, BoilingCountdownService.class);
             intent.putExtra(BoilingCountdownService.BEER_INDEX, beerIdx);
             startService(intent);
+
+            Intent intent1 = new Intent(BeerDetailActivity.this, BoilingCountDownActivity.class);
+            intent1.putExtra(BEER_INDEX, beerIdx);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent1);
         });
     }
 

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.DeflaterOutputStream;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.constants.Unit;

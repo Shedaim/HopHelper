@@ -10,15 +10,21 @@ import android.support.annotation.Nullable;
 
 import com.ankushgrover.hourglass.Hourglass;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import klevente.hu.hophelper.activities.MashingCountDownActivity;
 import klevente.hu.hophelper.R;
-import klevente.hu.hophelper.activities.BeerDetailActivity;
 import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 import klevente.hu.hophelper.data.MashTime;
+import klevente.hu.hophelper.events.MashFinishEvent;
+import klevente.hu.hophelper.events.MashPauseEvent;
+import klevente.hu.hophelper.events.MashUpdateEvent;
 
 public class MashingCountdownService extends Service {
     public static final String BEER_INDEX = "index";
@@ -26,7 +32,7 @@ public class MashingCountdownService extends Service {
     private static final int NOTIF_ID = 480;
 
     private class TimerHourglass extends Hourglass {
-        private int temp;
+        int temp;
         TimerHourglass(MashTime time) {
             super(time.millis, 1000);
             this.temp = time.temp;
@@ -35,12 +41,14 @@ public class MashingCountdownService extends Service {
         @Override
         public void onTimerTick(long timeRemaining) {
             updateNotification(getString(R.string.mashing_at, temp, MinSecondDateFormat.format(timeRemaining)));
+            EventBus.getDefault().post(new MashUpdateEvent(temp, timeRemaining));
         }
 
         @Override
         public void onTimerFinish() {
             timerIndex++;
             if (timerIndex == timers.size()) {
+                EventBus.getDefault().post(new MashFinishEvent());
                 stopSelf();
             } else {
                 timers.get(timerIndex).startTimer();
@@ -48,6 +56,17 @@ public class MashingCountdownService extends Service {
         }
     }
 
+
+    @Subscribe
+    public void onMashPauseEvent(MashPauseEvent event) {
+        if (event.paused) {
+            timers.get(timerIndex).pauseTimer();
+            updateNotification(getString(R.string.mashing_at, timers.get(timerIndex).temp, getString(R.string.paused)));
+        } else {
+            timers.get(timerIndex).resumeTimer();
+        }
+
+    }
 
     private int beerIdx;
     private Beer beer;
@@ -66,17 +85,20 @@ public class MashingCountdownService extends Service {
         timers.get(timerIndex).startTimer();
         startForeground(NOTIF_ID, getNotification("Timer start..."));
 
+        EventBus.getDefault().register(this);
+
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
+        EventBus.getDefault().unregister(this);
         stopForeground(true);
         super.onDestroy();
     }
 
     private Notification getNotification(String msg) {
-        Intent notifIntent = new Intent(this, BeerDetailActivity.class);
+        Intent notifIntent = new Intent(this, MashingCountDownActivity.class);
         notifIntent.putExtra(BEER_INDEX, beerIdx);
         PendingIntent contentIntent = PendingIntent.getActivity(this, NOTIF_ID, notifIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 

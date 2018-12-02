@@ -4,12 +4,14 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.ankushgrover.hourglass.Hourglass;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,9 @@ import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 import klevente.hu.hophelper.data.HopAddition;
+import klevente.hu.hophelper.events.BoilFinishEvent;
+import klevente.hu.hophelper.events.BoilPauseEvent;
+import klevente.hu.hophelper.events.BoilUpdateEvent;
 
 public class BoilingCountdownService extends Service {
     public static final String BEER_INDEX = "index";
@@ -37,17 +42,30 @@ public class BoilingCountdownService extends Service {
         @Override
         public void onTimerTick(long timeRemaining) {
             updateNotification(getString(R.string.boiling_for, grams, name, MinSecondDateFormat.format(timeRemaining)));
+            EventBus.getDefault().post(new BoilUpdateEvent(name, grams, timeRemaining));
         }
 
         @Override
         public void onTimerFinish() {
             timerIndex++;
             if (timerIndex == timers.size()) {
+                EventBus.getDefault().post(new BoilFinishEvent());
                 stopSelf();
             } else {
                 timers.get(timerIndex).startTimer();
             }
         }
+    }
+
+    @Subscribe
+    public void onMashPauseEvent(BoilPauseEvent event) {
+        if (event.paused) {
+            timers.get(timerIndex).pauseTimer();
+            updateNotification(getString(R.string.boiling_for, timers.get(timerIndex).grams, timers.get(timerIndex).name, getString(R.string.paused)));
+        } else {
+            timers.get(timerIndex).resumeTimer();
+        }
+
     }
 
     private int beerIdx;
@@ -66,11 +84,13 @@ public class BoilingCountdownService extends Service {
 
         timers.get(timerIndex).startTimer();
         startForeground(NOTIF_ID, getNotification("Timer start..."));
+        EventBus.getDefault().register(this);
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
+        EventBus.getDefault().unregister(this);
         stopForeground(true);
         super.onDestroy();
     }
