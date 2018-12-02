@@ -1,21 +1,24 @@
 package klevente.hu.hophelper.activities;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.NewBoilingAdapter;
 import klevente.hu.hophelper.adapters.NewIngredientsAdapter;
 import klevente.hu.hophelper.adapters.NewMashingAdapter;
 import klevente.hu.hophelper.constants.Unit;
+import klevente.hu.hophelper.data.Beer;
 
 public class NewBeerActivity extends AppCompatActivity {
 
@@ -112,7 +115,7 @@ public class NewBeerActivity extends AppCompatActivity {
         initRecyclerView(boilTimeRecyclerView, boilAdapter);
     }
 
-    private EditText isIngredientValid(EditText... text) {
+    private EditText isEditTextValid(EditText... text) {
         for (EditText v : text) {
             if (v.getText().toString().isEmpty()) {
                 return v;
@@ -123,7 +126,7 @@ public class NewBeerActivity extends AppCompatActivity {
 
     private void setClickListeners() {
         addMaltButton.setOnClickListener(v -> {
-            EditText errorText = isIngredientValid(maltNameEditText, maltQuantityEditText);
+            EditText errorText = isEditTextValid(maltNameEditText, maltQuantityEditText);
             if (errorText == null) {
                 try {
                     maltsAdapter.addItem(maltNameEditText.getText().toString(), Double.parseDouble(maltQuantityEditText.getText().toString()));
@@ -136,7 +139,7 @@ public class NewBeerActivity extends AppCompatActivity {
         });
 
         addHopButton.setOnClickListener(v -> {
-            EditText errorText = isIngredientValid(hopNameEditText, hopQuantityEditText);
+            EditText errorText = isEditTextValid(hopNameEditText, hopQuantityEditText);
             if (errorText == null) {
                 try {
                     hopsAdapter.addItem(hopNameEditText.getText().toString(), Double.parseDouble(hopQuantityEditText.getText().toString()));
@@ -149,7 +152,7 @@ public class NewBeerActivity extends AppCompatActivity {
         });
 
         addextraButton.setOnClickListener(v -> {
-            EditText errorText = isIngredientValid(extraNameEditText, extraQuantityEditText);
+            EditText errorText = isEditTextValid(extraNameEditText, extraQuantityEditText);
             if (errorText == null) {
                 try {
                     extrasAdapter.addItem(extraNameEditText.getText().toString(), Double.parseDouble(extraQuantityEditText.getText().toString()));
@@ -162,7 +165,7 @@ public class NewBeerActivity extends AppCompatActivity {
         });
 
         addMashTimeButton.setOnClickListener(v -> {
-            EditText errorText = isIngredientValid(mashTempEditText, mashTimeEditText);
+            EditText errorText = isEditTextValid(mashTempEditText, mashTimeEditText);
             if (errorText == null) {
                 try {
                     mashTimeAdapter.addItem(Integer.parseInt(mashTempEditText.getText().toString()), Long.parseLong(mashTimeEditText.getText().toString()));
@@ -175,7 +178,7 @@ public class NewBeerActivity extends AppCompatActivity {
         });
 
         addBoilTimeButton.setOnClickListener(v -> {
-            EditText errorText = isIngredientValid(boilNameEditText, boilQuantityEditText, boilTimeEditText);
+            EditText errorText = isEditTextValid(boilNameEditText, boilQuantityEditText, boilTimeEditText);
             if (errorText == null) {
                 try {
                     boilAdapter.addItem(boilNameEditText.getText().toString(), Double.parseDouble(boilQuantityEditText.getText().toString()), Long.parseLong(boilTimeEditText.getText().toString()));
@@ -188,6 +191,52 @@ public class NewBeerActivity extends AppCompatActivity {
         });
     }
 
+    private boolean isListsValid() {
+        if (maltsAdapter.getItemCount() == 0) {
+            maltNameEditText.setError(getString(R.string.at_least_one_element));
+            return false;
+        }
+        if (hopsAdapter.getItemCount() == 0) {
+            hopNameEditText.setError(getString(R.string.at_least_one_element));
+            return false;
+        }
+        if (mashTimeAdapter.getItemCount() == 0) {
+            mashTimeEditText.setError(getString(R.string.at_least_one_element));
+            return false;
+        }
+        if (boilAdapter.getItemCount() == 0) {
+            boilNameEditText.setError(getString(R.string.at_least_one_element));
+            return false;
+        }
+        return true;
+    }
+
+    private Beer getBeer() {
+        EditText errorText = isEditTextValid(nameEditText, styleEditText, batchSizeEditText, descriptionEditText, abvEditText, ogEditText, fgEditText, yeastEditText);
+        if (errorText == null) {
+            if (isListsValid()) {
+                Beer beer = new Beer();
+                beer.name = nameEditText.getText().toString();
+                beer.style = styleEditText.getText().toString();
+                beer.batchSize = Double.parseDouble(batchSizeEditText.getText().toString());
+                beer.description = descriptionEditText.getText().toString();
+                beer.abv = Double.parseDouble(abvEditText.getText().toString());
+                beer.og = Integer.parseInt(ogEditText.getText().toString());
+                beer.fg = Integer.parseInt(fgEditText.getText().toString());
+                beer.yeast = yeastEditText.getText().toString();
+                beer.malts = maltsAdapter.getIngredientMap();
+                beer.hops = hopsAdapter.getIngredientMap();
+                beer.extras = extrasAdapter.getIngredientMap();
+                beer.mashingTimes = mashTimeAdapter.getMashTimeList();
+                beer.boilingTimes = boilAdapter.getHopAdditionList();
+                return beer;
+            }
+        } else {
+            errorText.setError(getString(R.string.must_not_be_empty));
+        }
+        return null;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,15 +244,33 @@ public class NewBeerActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fabNewBeer);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getContentView();
         setClickListeners();
 
-        fab.hide();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_new_beer, menu);
+        return  true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                Beer newBeer = getBeer();
+                if (newBeer != null) {
+                    Intent result = new Intent();
+                    result.putExtra("beer", newBeer);
+                    setResult(Activity.RESULT_OK, result);
+                    finish();
+                }
+                return true;
+            default: return super.onOptionsItemSelected(item);
+        }
     }
 
 }

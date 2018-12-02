@@ -1,6 +1,8 @@
 package klevente.hu.hophelper.data;
 
-public class HopAddition {
+import java.io.Serializable;
+
+public class HopAddition implements Serializable {
     public String name;
     public double grams;
     public long millis;

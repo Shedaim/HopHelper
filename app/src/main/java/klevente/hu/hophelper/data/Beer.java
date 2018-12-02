@@ -4,7 +4,9 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Entity(tableName = "beer")
-public class Beer {
+public class Beer implements Serializable {
 
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)

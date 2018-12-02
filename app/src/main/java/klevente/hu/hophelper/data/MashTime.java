@@ -1,6 +1,8 @@
 package klevente.hu.hophelper.data;
 
-public class MashTime {
+import java.io.Serializable;
+
+public class MashTime implements Serializable {
     public long millis;
     public int temp;
 

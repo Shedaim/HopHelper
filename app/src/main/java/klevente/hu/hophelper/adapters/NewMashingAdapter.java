@@ -25,6 +25,10 @@ public class NewMashingAdapter extends RecyclerView.Adapter<NewMashingAdapter.Ne
 
     public NewMashingAdapter() {}
 
+    public List<MashTime> getMashTimeList() {
+        return mashTimes;
+    }
+
     public void addItem(int temp, long minutes) {
         mashTimes.add(new MashTime(TimeUnit.MINUTES.toMillis(minutes), temp));
         notifyDataSetChanged();

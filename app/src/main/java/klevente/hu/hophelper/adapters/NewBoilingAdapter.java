@@ -19,11 +19,15 @@ import klevente.hu.hophelper.data.HopAddition;
 
 public class NewBoilingAdapter extends RecyclerView.Adapter<NewBoilingAdapter.NewBoilingViewHolder> {
 
-    List<HopAddition> hopAdditions = new ArrayList<>();
+    private List<HopAddition> hopAdditions = new ArrayList<>();
 
     private Context context;
 
     public NewBoilingAdapter() {}
+
+    public List<HopAddition> getHopAdditionList() {
+        return hopAdditions;
+    }
 
     public void addItem(String name, double grams, long minutes) {
         hopAdditions.add(new HopAddition(name, grams, TimeUnit.MINUTES.toMillis(minutes)));

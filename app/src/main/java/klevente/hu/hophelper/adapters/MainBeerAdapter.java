@@ -64,6 +64,7 @@ public class MainBeerAdapter extends RecyclerView.Adapter<MainBeerAdapter.BeerVi
 
     public void updateAll(List<Beer> beers) {
         BeerList.setItems(beers);
+        notifyDataSetChanged();
     }
 
     public void addItem(Beer item) {

@@ -30,6 +30,15 @@ public class NewIngredientsAdapter extends RecyclerView.Adapter<NewIngredientsAd
         this.unit = unit;
     }
 
+    public Map<String, Double> getIngredientMap() {
+        Map<String, Double> map = new HashMap<>(ingredients.size());
+        for (Pair<String, Double> i : ingredients) {
+            map.put(i.first, i.second);
+        }
+
+        return map;
+    }
+
     public void addItem(String name, Double quantity) {
         ingredients.add(new Pair<>(name, quantity));
         notifyDataSetChanged();

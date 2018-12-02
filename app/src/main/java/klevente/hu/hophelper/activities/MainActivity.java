@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,7 +21,9 @@ import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 import klevente.hu.hophelper.database.HopHelperDatabase;
 
+
 public class MainActivity extends AppCompatActivity implements MainBeerAdapter.BeerAdapterListener {
+    public static final int ADD_NEW_BEER = 100;
 
     private RecyclerView recyclerView;
     private MainBeerAdapter adapter;
@@ -32,8 +35,8 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
         adapter = new MainBeerAdapter(recyclerView, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        // loadAllBeers();
-        debugInitData();
+        loadAllBeers();
+        // debugInitData();
     }
 
     @Deprecated
@@ -52,13 +55,24 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
         FloatingActionButton fab = findViewById(R.id.fabNewBeerDone);
         fab.setOnClickListener((view) -> {
             Intent intent = new Intent(MainActivity.this, NewBeerActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, ADD_NEW_BEER);
         });
 
 
 
         database = Room.databaseBuilder(getApplicationContext(), HopHelperDatabase.class, "hophelper").build();
         initRecyclerView();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_NEW_BEER) {
+            if (resultCode == RESULT_OK) {
+                Beer newBeer = (Beer) data.getSerializableExtra("beer");
+                onNewBeerCreated(newBeer);
+            }
+        }
     }
 
     @Override
@@ -122,6 +136,5 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
             }
         }.execute();
 
-        adapter.addItem(beer);
     }
 }
