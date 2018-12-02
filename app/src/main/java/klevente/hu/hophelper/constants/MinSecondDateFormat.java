@@ -2,7 +2,7 @@ package klevente.hu.hophelper.constants;
 
 import java.util.Locale;
 
-public class HourMinDateFormat {
+public class MinSecondDateFormat {
 
     public static String format(long millis) {
         int seconds = (int) ((millis / 1000) % 60);

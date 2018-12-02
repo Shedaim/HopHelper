@@ -9,10 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Locale;
 
 import klevente.hu.hophelper.R;
-import klevente.hu.hophelper.constants.HourMinDateFormat;
+import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.HopAddition;
 
@@ -39,7 +38,7 @@ public class BoilingAdapter extends RecyclerView.Adapter<BoilingAdapter.BoilView
         HopAddition addition = hopAdditions.get(position);
         holder.nameTextView.setText(addition.name);
         holder.quantityTextView.setText(context.getString(R.string.g, addition.grams));
-        holder.timeTextView.setText(context.getString(R.string.hourmin, HourMinDateFormat.format(addition.millis)));
+        holder.timeTextView.setText(context.getString(R.string.hourmin, MinSecondDateFormat.format(addition.millis)));
     }
 
     @Override

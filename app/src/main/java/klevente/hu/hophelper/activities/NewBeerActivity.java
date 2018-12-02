@@ -160,6 +160,32 @@ public class NewBeerActivity extends AppCompatActivity {
                 errorText.setError(getString(R.string.must_not_be_empty));
             }
         });
+
+        addMashTimeButton.setOnClickListener(v -> {
+            EditText errorText = isIngredientValid(mashTempEditText, mashTimeEditText);
+            if (errorText == null) {
+                try {
+                    mashTimeAdapter.addItem(Integer.parseInt(mashTempEditText.getText().toString()), Long.parseLong(mashTimeEditText.getText().toString()));
+                } catch (NumberFormatException e) {
+                    mashTimeAdapter.addItem(0, 0);
+                }
+            } else {
+                errorText.setError(getString(R.string.must_not_be_empty));
+            }
+        });
+
+        addBoilTimeButton.setOnClickListener(v -> {
+            EditText errorText = isIngredientValid(boilNameEditText, boilQuantityEditText, boilTimeEditText);
+            if (errorText == null) {
+                try {
+                    boilAdapter.addItem(boilNameEditText.getText().toString(), Double.parseDouble(boilQuantityEditText.getText().toString()), Long.parseLong(boilTimeEditText.getText().toString()));
+                } catch (NumberFormatException e) {
+                    boilAdapter.addItem(boilNameEditText.getText().toString(), 0, 0);
+                }
+            } else {
+                errorText.setError(getString(R.string.must_not_be_empty));
+            }
+        });
     }
 
     @Override

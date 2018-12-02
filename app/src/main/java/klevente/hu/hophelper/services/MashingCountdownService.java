@@ -5,23 +5,17 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.ankushgrover.hourglass.Hourglass;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.activities.BeerDetailActivity;
-import klevente.hu.hophelper.activities.MainActivity;
-import klevente.hu.hophelper.constants.HourMinDateFormat;
+import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 import klevente.hu.hophelper.data.MashTime;
@@ -38,7 +32,7 @@ public class MashingCountdownService extends Service {
 
         @Override
         public void onTimerTick(long timeRemaining) {
-            updateNotification(HourMinDateFormat.format(timeRemaining));
+            updateNotification(MinSecondDateFormat.format(timeRemaining));
         }
 
         @Override
@@ -60,7 +54,7 @@ public class MashingCountdownService extends Service {
         mashTimes = new ArrayList<>(beer.mashingTimes);
         long initialStartTime = mashTimes.get(0).millis;
 
-        startForeground(NOTIF_ID, getNotification(HourMinDateFormat.format(initialStartTime)));
+        startForeground(NOTIF_ID, getNotification(MinSecondDateFormat.format(initialStartTime)));
 
         // hourglass = new TimerHourglass(startTime);
         // hourglass.startTimer();
