@@ -125,6 +125,7 @@ public class BeerDetailActivity extends AppCompatActivity {
                 break;
             case REQUEST_CODE_OPEN_ITEM:
                 if (resultCode == RESULT_OK) {
+                    assert data != null;
                     DriveId driveId = data.getParcelableExtra(
                             OpenFileActivityOptions.EXTRA_RESPONSE_DRIVE_ID);
                     openItemTaskSource.setResult(driveId);

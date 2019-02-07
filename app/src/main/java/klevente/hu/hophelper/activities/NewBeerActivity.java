@@ -177,8 +177,16 @@ public class NewBeerActivity extends AppCompatActivity {
         });
 
         addBoilTimeButton.setOnClickListener(v -> {
-            EditText errorText = isEditTextValid(boilNameEditText, boilQuantityEditText, boilTimeEditText);
-            if (errorText == null) {
+            EditText errorText = isEditTextValid(boilTimeEditText);
+            if (boilNameEditText.getText().toString().isEmpty()){
+                try {
+                    boilAdapter.addItem("No hops", Double.parseDouble(" 0 "), Long.parseLong(boilTimeEditText.getText().toString()));
+                }
+                catch (NumberFormatException f) {
+                    boilAdapter.addItem(boilNameEditText.getText().toString(), 0, 0);
+                }
+            }
+            else if (errorText == null) {
                 try {
                     boilAdapter.addItem(boilNameEditText.getText().toString(), Double.parseDouble(boilQuantityEditText.getText().toString()), Long.parseLong(boilTimeEditText.getText().toString()));
                 } catch (NumberFormatException e) {
