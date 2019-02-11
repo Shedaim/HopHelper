@@ -50,6 +50,7 @@
     <string name="beer_g">g</string>
     <string name="mashing_temps">Mashing temps</string>
     <string name="hop_additions">Hop additions</string>
+    <string name="dry_hop_additions">Dry hop additions</string>
     <string name="beer_c">°C</string>
     <string name="beer_min">min</string>
     <string name="must_not_be_empty">Must not be empty!</string>
@@ -66,4 +67,7 @@
     <string name="paused">paused</string>
     <string name="title_activity_boiling_count_down">BoilingCountDownActivity</string>
     <string name="boiling_countdown">Boiling...</string>
+    <string name="Fermentation_times">Fermentation times</string>
+    <string name="Fermentation_temp">°C</string>
+    <string name="beer_day">days</string>
 </resources>

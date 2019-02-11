@@ -48,39 +48,4 @@ public class BeerList {
             return list.remove(e);
         }
     }
-
-    @Deprecated
-    public static void debugAddTestBeers() {
-        if (!list.isEmpty()) {
-            return;
-        }
-
-        Beer beer1 = new Beer(0, "Uradalmi Intro", "nagyon finom", "IPA", 1041, 1012, 5.2, 20.0);
-        beer1.addMalt("Pils", 3.0);
-        beer1.addMalt("Wheat", 0.5);
-        beer1.addMalt("Caramunich", 0.1);
-        beer1.addHop("Citra", 40.0);
-        beer1.addHop("Centennial", 10.0);
-        beer1.yeast = "Safale US-05";
-        beer1.addMashTimeMinutes(60, 55);
-        beer1.addMashTimeMinutes(10, 62);
-        beer1.addMashTimeMinutes(10, 72);
-        beer1.addBoilTimeMinutes("Centennial", 20, 60);
-        beer1.addBoilTimeMinutes("Citra", 10, 30);
-        BeerList.add(beer1);
-
-        Beer beer2 = new Beer(1, "Ugar Stróman", "hazy af", "New England IPA", 1053, 1020, 5.6, 20.0    );
-        beer2.addMalt("Pils", 3.0);
-        beer2.addMalt("Wheat", 0.5);
-        beer2.addMalt("Caramunich", 0.1);
-        beer2.addHop("Citra", 40.0);
-        beer2.addHop("Centennial", 10.0);
-        beer2.yeast = "Safale US-05";
-        beer2.addMashTimeMinutes(60, 55);
-        beer2.addMashTimeMinutes(10, 62);
-        beer2.addMashTimeMinutes(10, 72);
-        beer2.addBoilTimeMinutes("Centennial", 20, 60);
-        beer2.addBoilTimeMinutes("Citra", 10, 30);
-        BeerList.add(beer2);
-    }
 }

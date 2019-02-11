@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.NewBoilingAdapter;
+import klevente.hu.hophelper.adapters.NewFermentationAdapter;
 import klevente.hu.hophelper.adapters.NewIngredientsAdapter;
 import klevente.hu.hophelper.adapters.NewMashingAdapter;
 import klevente.hu.hophelper.constants.Unit;
@@ -60,6 +61,14 @@ public class NewBeerActivity extends AppCompatActivity {
     private Button   addBoilTimeButton;
     private RecyclerView boilTimeRecyclerView;
     private NewBoilingAdapter boilAdapter;
+
+    private EditText fermentationTempEditText;
+    private EditText fermentationNameEditText;
+    private EditText fermentationQuantityEditText;
+    private EditText fermentationTimeEditText;
+    private Button   addFermentationTimeButton;
+    private RecyclerView fermentationTimeRecyclerView;
+    private NewFermentationAdapter fermentationAdapter;
 
     private void initRecyclerView(RecyclerView view, RecyclerView.Adapter adapter) {
         view.setLayoutManager(new LinearLayoutManager(this));
@@ -112,6 +121,15 @@ public class NewBeerActivity extends AppCompatActivity {
         boilTimeRecyclerView = findViewById(R.id.rvNewBeerHopAdditions);
         boilAdapter = new NewBoilingAdapter();
         initRecyclerView(boilTimeRecyclerView, boilAdapter);
+
+        fermentationNameEditText = findViewById(R.id.etBeerDryHopAdditionName);
+        fermentationQuantityEditText = findViewById(R.id.etBeerDryHopAdditionQuantity);
+        fermentationTimeEditText = findViewById(R.id.etBeerDryHopAdditionTime);
+        fermentationTempEditText = findViewById(R.id.etBeerDryHopAdditionTemp);
+        addFermentationTimeButton = findViewById(R.id.btnAddFermentationTime);
+        fermentationTimeRecyclerView = findViewById(R.id.rvNewBeerDryHopAdditions);
+        fermentationAdapter = new NewFermentationAdapter();
+        initRecyclerView(fermentationTimeRecyclerView, fermentationAdapter);
     }
 
     private EditText isEditTextValid(EditText... text) {
@@ -196,6 +214,27 @@ public class NewBeerActivity extends AppCompatActivity {
                 errorText.setError(getString(R.string.must_not_be_empty));
             }
         });
+
+        addFermentationTimeButton.setOnClickListener(v -> {
+            EditText errorText = isEditTextValid(fermentationNameEditText, fermentationQuantityEditText, fermentationTimeEditText, fermentationTempEditText);
+            if (fermentationNameEditText.getText().toString().isEmpty()){
+                try {
+                    fermentationAdapter.addItem("No hops", Double.parseDouble(" 0 "), Long.parseLong(fermentationTimeEditText.getText().toString()), Integer.parseInt(fermentationTempEditText.getText().toString()));
+                }
+                catch (NumberFormatException f) {
+                    fermentationAdapter.addItem(fermentationNameEditText.getText().toString(), 0, 0, 0);
+                }
+            }
+            else if (errorText == null) {
+                try {
+                    fermentationAdapter.addItem(fermentationNameEditText.getText().toString(), Double.parseDouble(fermentationQuantityEditText.getText().toString()), Long.parseLong(fermentationTimeEditText.getText().toString()), Integer.parseInt(fermentationTempEditText.getText().toString()));
+                } catch (NumberFormatException e) {
+                    fermentationAdapter.addItem(fermentationNameEditText.getText().toString(), 0, 0, 0);
+                }
+            } else {
+                errorText.setError(getString(R.string.must_not_be_empty));
+            }
+        });
     }
 
     private boolean isListsValid() {
@@ -236,6 +275,7 @@ public class NewBeerActivity extends AppCompatActivity {
                 beer.extras = extrasAdapter.getIngredientMap();
                 beer.mashingTimes = mashTimeAdapter.getMashTimeList();
                 beer.boilingTimes = boilAdapter.getHopAdditionList();
+                beer.fermentationTimes = fermentationAdapter.getFermentationTimeList();
                 return beer;
             }
         } else {

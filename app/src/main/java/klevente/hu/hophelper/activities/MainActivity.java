@@ -38,11 +38,6 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
         // debugInitData();
     }
 
-    @Deprecated
-    private void debugInitData() {
-        BeerList.debugAddTestBeers();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import klevente.hu.hophelper.data.FermentationTime;
 import klevente.hu.hophelper.data.HopAddition;
 import klevente.hu.hophelper.data.MashTime;
 
@@ -59,6 +60,20 @@ public class Converters {
 
     @TypeConverter
     public static String listOfHopAdditionToString(List<HopAddition> list) {
+        return gson.toJson(list);
+    }
+
+    @TypeConverter
+    public static List<FermentationTime> stringToListDryHopAddition(String value) {
+        if (value == null) {
+            return Collections.emptyList();
+        }
+
+        Type listType = new TypeToken<ArrayList<FermentationTime>>(){}.getType();
+        return gson.fromJson(value, listType);
+    }
+    @TypeConverter
+    public static String listOfDryHopAdditionToString(List<FermentationTime> list) {
         return gson.toJson(list);
     }
 

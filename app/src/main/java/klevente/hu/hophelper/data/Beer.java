@@ -58,6 +58,9 @@ public class Beer implements Serializable {
     @ColumnInfo(name = "boil")
     public List<HopAddition>  boilingTimes = new ArrayList<>();
 
+    @ColumnInfo(name = "fermentation")
+    public List<FermentationTime>  fermentationTimes = new ArrayList<>();
+
     public Beer() {}
 
     @Ignore
@@ -100,11 +103,9 @@ public class Beer implements Serializable {
         extras.put(name, quantity);
     }
 
-    public void addMashTimeMillis(long millis, int temp) { mashingTimes.add(new MashTime(millis, temp)); }
-
     public void addMashTimeMinutes(int minutes, int temp) { mashingTimes.add(new MashTime(TimeUnit.MINUTES.toMillis(minutes), temp)); }
 
-    public void addBoilTimeMillis(String hopName, double grams, long millis) { boilingTimes.add(new HopAddition(hopName, grams, millis)); }
-
     public void addBoilTimeMinutes(String hopName, double grams, int minutes) { boilingTimes.add(new HopAddition(hopName, grams, TimeUnit.MINUTES.toMillis(minutes))); }
+
+    public void addFermentationTimeDays(String dry_hop, double grams, int days, int temp) { fermentationTimes.add(new FermentationTime(dry_hop, grams, TimeUnit.MINUTES.toMillis(days), temp)); }
 }
