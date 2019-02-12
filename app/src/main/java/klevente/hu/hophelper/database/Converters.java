@@ -12,9 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import klevente.hu.hophelper.data.FermentationTime;
-import klevente.hu.hophelper.data.HopAddition;
-import klevente.hu.hophelper.data.MashTime;
+import klevente.hu.hophelper.data.Ingredient;
 
 public class Converters {
 
@@ -34,46 +32,16 @@ public class Converters {
     }
 
     @TypeConverter
-    public static List<MashTime> stringToListOfMashTime(String value) {
+    public static List<Ingredient> stringToListDryHopAddition(String value) {
         if (value == null) {
             return Collections.emptyList();
         }
 
-        Type listType = new TypeToken<ArrayList<MashTime>>(){}.getType();
-        return gson.fromJson(value, listType);
-    }
-
-    @TypeConverter
-    public static String listOfMashTimeToString(List<MashTime> list) {
-        return gson.toJson(list);
-    }
-
-    @TypeConverter
-    public static List<HopAddition> stringToListHopAddition(String value) {
-        if (value == null) {
-            return Collections.emptyList();
-        }
-
-        Type listType = new TypeToken<ArrayList<HopAddition>>(){}.getType();
-        return gson.fromJson(value, listType);
-    }
-
-    @TypeConverter
-    public static String listOfHopAdditionToString(List<HopAddition> list) {
-        return gson.toJson(list);
-    }
-
-    @TypeConverter
-    public static List<FermentationTime> stringToListDryHopAddition(String value) {
-        if (value == null) {
-            return Collections.emptyList();
-        }
-
-        Type listType = new TypeToken<ArrayList<FermentationTime>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<Ingredient>>(){}.getType();
         return gson.fromJson(value, listType);
     }
     @TypeConverter
-    public static String listOfDryHopAdditionToString(List<FermentationTime> list) {
+    public static String listOfDryHopAdditionToString(List<Ingredient> list) {
         return gson.toJson(list);
     }
 

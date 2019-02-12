@@ -53,13 +53,13 @@ public class Beer implements Serializable {
     public String yeast;
 
     @ColumnInfo(name = "mash")
-    public List<MashTime> mashingTimes = new ArrayList<>();
+    public List<Ingredient> mashingTimes = new ArrayList<>();
 
     @ColumnInfo(name = "boil")
-    public List<HopAddition>  boilingTimes = new ArrayList<>();
+    public List<Ingredient>  boilingTimes = new ArrayList<>();
 
     @ColumnInfo(name = "fermentation")
-    public List<FermentationTime>  fermentationTimes = new ArrayList<>();
+    public List<Ingredient>  fermentationTimes = new ArrayList<>();
 
     public Beer() {}
 
@@ -103,9 +103,9 @@ public class Beer implements Serializable {
         extras.put(name, quantity);
     }
 
-    public void addMashTimeMinutes(int minutes, int temp) { mashingTimes.add(new MashTime(TimeUnit.MINUTES.toMillis(minutes), temp)); }
+    public void addMashTimeMinutes(int minutes, int temp) { mashingTimes.add(new Ingredient("", 0, TimeUnit.MINUTES.toMillis(minutes), temp)); }
 
-    public void addBoilTimeMinutes(String hopName, double grams, int minutes) { boilingTimes.add(new HopAddition(hopName, grams, TimeUnit.MINUTES.toMillis(minutes))); }
+    public void addBoilTimeMinutes(String hopName, float grams, int minutes) { boilingTimes.add(new Ingredient(hopName, grams, TimeUnit.MINUTES.toMillis(minutes), 100)); }
 
-    public void addFermentationTimeDays(String dry_hop, double grams, int days, int temp) { fermentationTimes.add(new FermentationTime(dry_hop, grams, TimeUnit.MINUTES.toMillis(days), temp)); }
+    public void addFermentationTimeDays(String dry_hop, float grams, int days, int temp) { fermentationTimes.add(new Ingredient(dry_hop, grams, TimeUnit.MINUTES.toMillis(days), temp)); }
 }

@@ -15,26 +15,26 @@ import java.util.concurrent.TimeUnit;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.constants.MinSecondDateFormat;
-import klevente.hu.hophelper.data.HopAddition;
+import klevente.hu.hophelper.data.Ingredient;
 
 public class NewBoilingAdapter extends RecyclerView.Adapter<NewBoilingAdapter.NewBoilingViewHolder> {
 
-    private List<HopAddition> hopAdditions = new ArrayList<>();
+    private List<Ingredient> hopAdditions = new ArrayList<>();
 
     private Context context;
 
     public NewBoilingAdapter() {}
 
-    public List<HopAddition> getHopAdditionList() {
+    public List<Ingredient> getHopAdditionList() {
         return hopAdditions;
     }
 
-    public void addItem(String name, double grams, long minutes) {
-        hopAdditions.add(new HopAddition(name, grams, TimeUnit.MINUTES.toMillis(minutes)));
+    public void addItem(String name, float grams, long minutes) {
+        hopAdditions.add(new Ingredient(name, grams, TimeUnit.MINUTES.toMillis(minutes), 100));
         notifyDataSetChanged();
     }
 
-    private void removeItem(HopAddition addition) {
+    private void removeItem(Ingredient addition) {
         hopAdditions.remove(addition);
         notifyDataSetChanged();
     }
@@ -49,10 +49,10 @@ public class NewBoilingAdapter extends RecyclerView.Adapter<NewBoilingAdapter.Ne
 
     @Override
     public void onBindViewHolder(@NonNull NewBoilingViewHolder holder, int position) {
-        HopAddition addition = hopAdditions.get(position);
+        Ingredient addition = hopAdditions.get(position);
         holder.nameTextView.setText(addition.name);
-        holder.quantityTextView.setText(context.getString(R.string.g, addition.grams));
-        holder.timeTextView.setText(MinSecondDateFormat.format(addition.millis));
+        holder.quantityTextView.setText(context.getString(R.string.g, addition.quantity));
+        holder.timeTextView.setText(MinSecondDateFormat.format(addition.time));
 
         holder.addition = addition;
     }
@@ -67,7 +67,7 @@ public class NewBoilingAdapter extends RecyclerView.Adapter<NewBoilingAdapter.Ne
         TextView timeTextView;
         ImageButton deleteButton;
 
-        HopAddition addition;
+        Ingredient addition;
 
         NewBoilingViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -1,8 +1,6 @@
 package klevente.hu.hophelper.activities;
 
 import android.content.Intent;
-import android.content.IntentSender;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -15,41 +13,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.DriveClient;
-import com.google.android.gms.drive.DriveContents;
-import com.google.android.gms.drive.DriveFolder;
-import com.google.android.gms.drive.DriveId;
-import com.google.android.gms.drive.DriveResourceClient;
-import com.google.android.gms.drive.MetadataChangeSet;
-import com.google.android.gms.drive.OpenFileActivityOptions;
-import com.google.android.gms.drive.query.Filters;
-import com.google.android.gms.drive.query.SearchableField;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import klevente.hu.hophelper.constants.MinSecondDateFormat;
-import klevente.hu.hophelper.data.HopAddition;
-import klevente.hu.hophelper.data.MashTime;
 import klevente.hu.hophelper.fragments.BeerDetailIngrendientsFragment;
 import klevente.hu.hophelper.fragments.BeerDetailsBoilingFragment;
+import klevente.hu.hophelper.fragments.BeerDetailsFermentationFragment;
 import klevente.hu.hophelper.fragments.BeerDetailsMashingFragment;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.data.Beer;
@@ -60,8 +28,8 @@ import klevente.hu.hophelper.services.MashingCountdownService;
 public class BeerDetailActivity extends AppCompatActivity {
 
     public static final String BEER_INDEX = "index";
-    private static final int REQUEST_CODE_SIGN_IN = 0;
-    private static final int REQUEST_CODE_OPEN_ITEM = 1;
+    //private static final int REQUEST_CODE_SIGN_IN = 0;
+    //private static final int REQUEST_CODE_OPEN_ITEM = 1;
 
     private Beer beer;
     private int beerIdx;
@@ -69,15 +37,16 @@ public class BeerDetailActivity extends AppCompatActivity {
     private FloatingActionButton fabEdit;
     private FloatingActionButton fabStartMash;
     private FloatingActionButton fabStartBoil;
+    private FloatingActionButton fabStartFermentation;
 
-    private DriveClient driveClient;
-    private DriveResourceClient driveResourceClient;
-    private TaskCompletionSource<DriveId> openItemTaskSource;
+    //private DriveClient driveClient;
+    //private DriveResourceClient driveResourceClient;
+    //private TaskCompletionSource<DriveId> openItemTaskSource;
 
     @Override
     protected void onStart() {
         super.onStart();
-        signIn();
+        //signIn();
     }
 
     @Override
@@ -109,7 +78,7 @@ public class BeerDetailActivity extends AppCompatActivity {
         toolbar.setTitle(beer.name);
 
     }
-
+/*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode) {
@@ -157,7 +126,6 @@ public class BeerDetailActivity extends AppCompatActivity {
         driveClient = Drive.getDriveClient(getApplicationContext(), signInAccount);
         driveResourceClient = Drive.getDriveResourceClient(getApplicationContext(), signInAccount);
     }
-
     private void createFileInFolder(final DriveFolder parent) {
         driveResourceClient
                 .createContents()
@@ -181,6 +149,7 @@ public class BeerDetailActivity extends AppCompatActivity {
                     showMessage(getString(R.string.unable));
                 });
     }
+
 
     private void writeContents(Writer writer) throws IOException {
         StringBuilder builder = new StringBuilder(beer.name + '\n');
@@ -215,8 +184,14 @@ public class BeerDetailActivity extends AppCompatActivity {
             builder.append(h.name).append(' ').append(getString(R.string.g, h.grams)).append(": ").append(MinSecondDateFormat.format(h.millis)).append('\n');
         }
 
+        builder.append("\nFermentation\n");
+        for (FermentationTime f : beer.fermentationTimes) {
+            builder.append(f.dry_hop).append(' ').append(getString(R.string.g, f.grams)).append(": ").append(getString(R.string.celsius, f.temp)).append(TimeUnit.MILLISECONDS.toDays(f.millis)).append('\n');
+        }
+
         writer.write(builder.toString());
     }
+
 
     protected void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -252,11 +227,13 @@ public class BeerDetailActivity extends AppCompatActivity {
         });
     }
 
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_beer_detail, menu);
         return true;
     }
+/*
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -268,6 +245,7 @@ public class BeerDetailActivity extends AppCompatActivity {
             default: return super.onOptionsItemSelected(item);
         }
     }
+*/
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -281,13 +259,14 @@ public class BeerDetailActivity extends AppCompatActivity {
                 case 0:  return BeerDetailIngrendientsFragment.newInstance(beerIdx);
                 case 1:  return BeerDetailsMashingFragment.newInstance(beerIdx);
                 case 2:  return BeerDetailsBoilingFragment.newInstance(beerIdx);
+                case 3:  return BeerDetailsFermentationFragment.newInstance(beerIdx);
                 default: return BeerDetailIngrendientsFragment.newInstance(beerIdx);
             }
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
     }
 
@@ -295,10 +274,12 @@ public class BeerDetailActivity extends AppCompatActivity {
         fabEdit = findViewById(R.id.fabBeerDetailEdit);
         fabStartMash = findViewById(R.id.fabBeerDetailStartMash);
         fabStartBoil = findViewById(R.id.fabBeerDetailStartBoil);
+        fabStartFermentation = findViewById(R.id.fabBeerDetailStartFermentation);
 
         fabEdit.show();
         fabStartMash.hide();
         fabStartBoil.hide();
+        fabStartFermentation.hide();
 
         fabEdit.setOnClickListener(v -> Snackbar.make(v, R.string.not_implemented, Snackbar.LENGTH_SHORT));
 
@@ -323,6 +304,11 @@ public class BeerDetailActivity extends AppCompatActivity {
             intent1.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent1);
         });
+
+        fabStartFermentation.setOnClickListener(v -> {
+            //TODO Add fermentation period to calendar
+            Toast.makeText(this,"Not implemented yet", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void animateFab(int position) {
@@ -331,14 +317,23 @@ public class BeerDetailActivity extends AppCompatActivity {
                 fabEdit.show();
                 fabStartMash.hide();
                 fabStartBoil.hide();
+                fabStartFermentation.hide();
                 break;
             case 1:
                 fabStartMash.show();
                 fabEdit.hide();
                 fabStartBoil.hide();
+                fabStartFermentation.hide();
                 break;
             case 2:
                 fabStartBoil.show();
+                fabEdit.hide();
+                fabStartMash.hide();
+                fabStartFermentation.hide();
+                break;
+            case 3:
+                fabStartFermentation.show();
+                fabStartBoil.hide();
                 fabEdit.hide();
                 fabStartMash.hide();
                 break;
@@ -346,6 +341,7 @@ public class BeerDetailActivity extends AppCompatActivity {
                 fabEdit.show();
                 fabStartMash.hide();
                 fabStartBoil.hide();
+                fabStartFermentation.hide();
                 break;
         }
     }

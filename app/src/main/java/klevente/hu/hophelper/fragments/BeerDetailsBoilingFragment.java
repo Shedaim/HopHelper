@@ -45,7 +45,6 @@ public class BeerDetailsBoilingFragment extends Fragment {
         boilingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         boilingRecyclerView.setAdapter(boilingAdapter);
 
-
         return view;
     }
 

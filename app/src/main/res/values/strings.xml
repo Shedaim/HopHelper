@@ -24,10 +24,10 @@
     <string name="extras">Extras</string>
     <string name="export">Export</string>
 
-    <string name="kg">%1$.1f kg</string>
+    <string name="kg">%1$.2f kg</string>
     <string name="g">%1$.0f g</string>
     <string name="hourmin">%1$s</string>
-    <string name="celsius">%1$d °C</string>
+    <string name="celsius">%1$.1f °C</string>
     <string name="title_activity_new_beer">Add new beer</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
@@ -48,8 +48,8 @@
     <string name="hop_name">Hop name</string>
     <string name="extra_name">Extra name</string>
     <string name="beer_g">g</string>
-    <string name="mashing_temps">Mashing temps</string>
-    <string name="hop_additions">Hop additions</string>
+    <string name="mashing_times">Mashing times</string>
+    <string name="hop_additions">Boiling times</string>
     <string name="dry_hop_additions">Dry hop additions</string>
     <string name="beer_c">°C</string>
     <string name="beer_min">min</string>
@@ -70,4 +70,6 @@
     <string name="Fermentation_times">Fermentation times</string>
     <string name="Fermentation_temp">°C</string>
     <string name="beer_day">days</string>
+    <string name="fermentation">Fermentation</string>
+    <string name="days">%1$d days</string>
 </resources>

@@ -21,7 +21,7 @@ import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
-import klevente.hu.hophelper.data.MashTime;
+import klevente.hu.hophelper.data.Ingredient;
 import klevente.hu.hophelper.events.MashFinishEvent;
 import klevente.hu.hophelper.events.MashPauseEvent;
 import klevente.hu.hophelper.events.MashUpdateEvent;
@@ -32,9 +32,9 @@ public class MashingCountdownService extends Service {
     private static final int NOTIF_ID = 480;
 
     private class TimerHourglass extends Hourglass {
-        int temp;
-        TimerHourglass(MashTime time) {
-            super(time.millis, 1000);
+        float temp;
+        TimerHourglass(Ingredient time) {
+            super(time.time, 1000);
             this.temp = time.temp;
         }
 
@@ -78,7 +78,7 @@ public class MashingCountdownService extends Service {
         beerIdx = intent.getIntExtra(BEER_INDEX, -1);
         beer = BeerList.get(beerIdx);
         timers = new ArrayList<>(beer.mashingTimes.size());
-        for (MashTime m : beer.mashingTimes) {
+        for (Ingredient m : beer.mashingTimes) {
             timers.add(new TimerHourglass(m));
         }
 

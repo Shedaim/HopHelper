@@ -13,11 +13,11 @@ import java.util.List;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.Beer;
-import klevente.hu.hophelper.data.HopAddition;
+import klevente.hu.hophelper.data.Ingredient;
 
 public class BoilingAdapter extends RecyclerView.Adapter<BoilingAdapter.BoilViewHolder> {
 
-    List<HopAddition> hopAdditions;
+    List<Ingredient> hopAdditions;
 
     private Context context;
 
@@ -35,10 +35,10 @@ public class BoilingAdapter extends RecyclerView.Adapter<BoilingAdapter.BoilView
 
     @Override
     public void onBindViewHolder(@NonNull BoilViewHolder holder, int position) {
-        HopAddition addition = hopAdditions.get(position);
+        Ingredient addition = hopAdditions.get(position);
         holder.nameTextView.setText(addition.name);
-        holder.quantityTextView.setText(context.getString(R.string.g, addition.grams));
-        holder.timeTextView.setText(context.getString(R.string.hourmin, MinSecondDateFormat.format(addition.millis)));
+        holder.quantityTextView.setText(context.getString(R.string.g, addition.quantity));
+        holder.timeTextView.setText(context.getString(R.string.hourmin, MinSecondDateFormat.format(addition.time)));
     }
 
     @Override

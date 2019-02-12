@@ -15,26 +15,26 @@ import java.util.concurrent.TimeUnit;
 
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.constants.MinSecondDateFormat;
-import klevente.hu.hophelper.data.MashTime;
+import klevente.hu.hophelper.data.Ingredient;
 
 public class NewMashingAdapter extends RecyclerView.Adapter<NewMashingAdapter.NewMashingViewHolder> {
 
-    private List<MashTime> mashTimes = new ArrayList<>();
+    private List<Ingredient> mashTimes = new ArrayList<>();
 
     private Context context;
 
     public NewMashingAdapter() {}
 
-    public List<MashTime> getMashTimeList() {
+    public List<Ingredient> getMashTimeList() {
         return mashTimes;
     }
 
     public void addItem(int temp, long minutes) {
-        mashTimes.add(new MashTime(TimeUnit.MINUTES.toMillis(minutes), temp));
+        mashTimes.add(new Ingredient("", 0, TimeUnit.MINUTES.toMillis(minutes), temp));
         notifyDataSetChanged();
     }
 
-    private void removeItem(MashTime time) {
+    private void removeItem(Ingredient time) {
         mashTimes.remove(time);
         notifyDataSetChanged();
     }
@@ -49,9 +49,9 @@ public class NewMashingAdapter extends RecyclerView.Adapter<NewMashingAdapter.Ne
 
     @Override
     public void onBindViewHolder(@NonNull NewMashingViewHolder holder, int position) {
-        MashTime time = mashTimes.get(position);
+        Ingredient time = mashTimes.get(position);
         holder.tempTextView.setText(context.getString(R.string.celsius, time.temp));
-        holder.timeTextView.setText(MinSecondDateFormat.format(time.millis));
+        holder.timeTextView.setText(MinSecondDateFormat.format(time.time));
         holder.time = time;
     }
 
@@ -64,7 +64,7 @@ public class NewMashingAdapter extends RecyclerView.Adapter<NewMashingAdapter.Ne
         TextView timeTextView;
         ImageButton deleteButton;
 
-        MashTime time;
+        Ingredient time;
 
         NewMashingViewHolder(@NonNull View itemView) {
             super(itemView);

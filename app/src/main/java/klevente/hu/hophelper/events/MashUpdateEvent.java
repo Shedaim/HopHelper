@@ -1,10 +1,10 @@
 package klevente.hu.hophelper.events;
 
 public class MashUpdateEvent {
-    public final int temp;
+    public final float temp;
     public final long millis;
 
-    public MashUpdateEvent(int temp, long millis) {
+    public MashUpdateEvent(float temp, long millis) {
         this.temp = temp;
         this.millis = millis;
     }

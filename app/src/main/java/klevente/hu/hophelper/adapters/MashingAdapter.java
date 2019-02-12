@@ -13,11 +13,11 @@ import java.util.List;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.Beer;
-import klevente.hu.hophelper.data.MashTime;
+import klevente.hu.hophelper.data.Ingredient;
 
 public class MashingAdapter extends RecyclerView.Adapter<MashingAdapter.MashViewHolder> {
 
-    private List<MashTime> mashingTimes;
+    private List<Ingredient> mashingTimes;
 
     private Context context;
 
@@ -35,8 +35,8 @@ public class MashingAdapter extends RecyclerView.Adapter<MashingAdapter.MashView
 
     @Override
     public void onBindViewHolder(@NonNull MashViewHolder holder, int position) {
-        MashTime time = mashingTimes.get(position);
-        holder.timeTextView.setText(context.getString(R.string.hourmin, MinSecondDateFormat.format(time.millis)));
+        Ingredient time = mashingTimes.get(position);
+        holder.timeTextView.setText(context.getString(R.string.hourmin, MinSecondDateFormat.format(time.time)));
         holder.tempTextView.setText(context.getString(R.string.celsius, time.temp));
     }
 

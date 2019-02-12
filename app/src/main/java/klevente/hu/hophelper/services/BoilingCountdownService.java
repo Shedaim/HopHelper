@@ -21,7 +21,7 @@ import klevente.hu.hophelper.activities.BeerDetailActivity;
 import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
-import klevente.hu.hophelper.data.HopAddition;
+import klevente.hu.hophelper.data.Ingredient;
 import klevente.hu.hophelper.events.BoilFinishEvent;
 import klevente.hu.hophelper.events.BoilPauseEvent;
 import klevente.hu.hophelper.events.BoilUpdateEvent;
@@ -31,11 +31,11 @@ public class BoilingCountdownService extends Service {
     private static final int NOTIF_ID = 190;
 
     private class TimerHourGlass extends Hourglass {
-        private double grams;
+        private float grams;
         private String name;
-        TimerHourGlass(HopAddition addition) {
-            super(addition.millis, 1000);
-            this.grams = addition.grams;
+        TimerHourGlass(Ingredient addition) {
+            super(addition.time, 1000);
+            this.grams = addition.quantity;
             this.name = addition.name;
         }
 
@@ -78,7 +78,7 @@ public class BoilingCountdownService extends Service {
         beerIdx = intent.getIntExtra(BEER_INDEX, -1);
         beer = BeerList.get(beerIdx);
         timers = new ArrayList<>(beer.boilingTimes.size());
-        for (HopAddition h : beer.boilingTimes) {
+        for (Ingredient h : beer.boilingTimes) {
             timers.add(new TimerHourGlass(h));
         }
 

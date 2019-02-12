@@ -15,6 +15,7 @@ import android.widget.EditText;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.NewBoilingAdapter;
 import klevente.hu.hophelper.adapters.NewFermentationAdapter;
+import klevente.hu.hophelper.adapters.NewIngredientAdapter;
 import klevente.hu.hophelper.adapters.NewIngredientsAdapter;
 import klevente.hu.hophelper.adapters.NewMashingAdapter;
 import klevente.hu.hophelper.constants.Unit;
@@ -53,14 +54,14 @@ public class NewBeerActivity extends AppCompatActivity {
     private EditText mashTimeEditText;
     private Button   addMashTimeButton;
     private RecyclerView mashTimeRecyclerView;
-    private NewMashingAdapter mashTimeAdapter;
+    private NewIngredientAdapter mashTimeAdapter;
 
     private EditText boilNameEditText;
     private EditText boilQuantityEditText;
     private EditText boilTimeEditText;
     private Button   addBoilTimeButton;
     private RecyclerView boilTimeRecyclerView;
-    private NewBoilingAdapter boilAdapter;
+    private NewIngredientAdapter boilAdapter;
 
     private EditText fermentationTempEditText;
     private EditText fermentationNameEditText;
@@ -68,7 +69,7 @@ public class NewBeerActivity extends AppCompatActivity {
     private EditText fermentationTimeEditText;
     private Button   addFermentationTimeButton;
     private RecyclerView fermentationTimeRecyclerView;
-    private NewFermentationAdapter fermentationAdapter;
+    private NewIngredientAdapter fermentationAdapter;
 
     private void initRecyclerView(RecyclerView view, RecyclerView.Adapter adapter) {
         view.setLayoutManager(new LinearLayoutManager(this));
@@ -111,7 +112,7 @@ public class NewBeerActivity extends AppCompatActivity {
         mashTimeEditText = findViewById(R.id.etBeerMashTime);
         addMashTimeButton = findViewById(R.id.btnAddMashTime);
         mashTimeRecyclerView = findViewById(R.id.rvNewBeerMashingTemps);
-        mashTimeAdapter = new NewMashingAdapter();
+        mashTimeAdapter = new NewIngredientAdapter("mash");
         initRecyclerView(mashTimeRecyclerView, mashTimeAdapter);
 
         boilNameEditText = findViewById(R.id.etBeerHopAdditionName);
@@ -119,7 +120,7 @@ public class NewBeerActivity extends AppCompatActivity {
         boilTimeEditText = findViewById(R.id.etBeerHopAdditionTime);
         addBoilTimeButton = findViewById(R.id.btnAddBoilTime);
         boilTimeRecyclerView = findViewById(R.id.rvNewBeerHopAdditions);
-        boilAdapter = new NewBoilingAdapter();
+        boilAdapter = new NewIngredientAdapter("boil");
         initRecyclerView(boilTimeRecyclerView, boilAdapter);
 
         fermentationNameEditText = findViewById(R.id.etBeerDryHopAdditionName);
@@ -128,7 +129,7 @@ public class NewBeerActivity extends AppCompatActivity {
         fermentationTempEditText = findViewById(R.id.etBeerDryHopAdditionTemp);
         addFermentationTimeButton = findViewById(R.id.btnAddFermentationTime);
         fermentationTimeRecyclerView = findViewById(R.id.rvNewBeerDryHopAdditions);
-        fermentationAdapter = new NewFermentationAdapter();
+        fermentationAdapter = new NewIngredientAdapter("fermentation");
         initRecyclerView(fermentationTimeRecyclerView, fermentationAdapter);
     }
 
@@ -185,9 +186,9 @@ public class NewBeerActivity extends AppCompatActivity {
             EditText errorText = isEditTextValid(mashTempEditText, mashTimeEditText);
             if (errorText == null) {
                 try {
-                    mashTimeAdapter.addItem(Integer.parseInt(mashTempEditText.getText().toString()), Long.parseLong(mashTimeEditText.getText().toString()));
+                    mashTimeAdapter.addItem("", 0, Long.parseLong(mashTimeEditText.getText().toString()), Float.parseFloat(mashTempEditText.getText().toString()));
                 } catch (NumberFormatException e) {
-                    mashTimeAdapter.addItem(0, 0);
+                    mashTimeAdapter.addItem("", 0, 0, 0);
                 }
             } else {
                 errorText.setError(getString(R.string.must_not_be_empty));
@@ -198,17 +199,17 @@ public class NewBeerActivity extends AppCompatActivity {
             EditText errorText = isEditTextValid(boilTimeEditText);
             if (boilNameEditText.getText().toString().isEmpty()){
                 try {
-                    boilAdapter.addItem("No hops", Double.parseDouble(" 0 "), Long.parseLong(boilTimeEditText.getText().toString()));
+                    boilAdapter.addItem("No hops", Float.parseFloat(" 0 "), Long.parseLong(boilTimeEditText.getText().toString()), 100);
                 }
                 catch (NumberFormatException f) {
-                    boilAdapter.addItem(boilNameEditText.getText().toString(), 0, 0);
+                    boilAdapter.addItem(boilNameEditText.getText().toString(), 0, 0, 100);
                 }
             }
             else if (errorText == null) {
                 try {
-                    boilAdapter.addItem(boilNameEditText.getText().toString(), Double.parseDouble(boilQuantityEditText.getText().toString()), Long.parseLong(boilTimeEditText.getText().toString()));
+                    boilAdapter.addItem(boilNameEditText.getText().toString(), Float.parseFloat(boilQuantityEditText.getText().toString()), Long.parseLong(boilTimeEditText.getText().toString()), 100);
                 } catch (NumberFormatException e) {
-                    boilAdapter.addItem(boilNameEditText.getText().toString(), 0, 0);
+                    boilAdapter.addItem(boilNameEditText.getText().toString(), 0, 0, 100);
                 }
             } else {
                 errorText.setError(getString(R.string.must_not_be_empty));
@@ -219,7 +220,7 @@ public class NewBeerActivity extends AppCompatActivity {
             EditText errorText = isEditTextValid(fermentationNameEditText, fermentationQuantityEditText, fermentationTimeEditText, fermentationTempEditText);
             if (fermentationNameEditText.getText().toString().isEmpty()){
                 try {
-                    fermentationAdapter.addItem("No hops", Double.parseDouble(" 0 "), Long.parseLong(fermentationTimeEditText.getText().toString()), Integer.parseInt(fermentationTempEditText.getText().toString()));
+                    fermentationAdapter.addItem("No hops", Float.parseFloat(" 0 "), Long.parseLong(fermentationTimeEditText.getText().toString()), Integer.parseInt(fermentationTempEditText.getText().toString()));
                 }
                 catch (NumberFormatException f) {
                     fermentationAdapter.addItem(fermentationNameEditText.getText().toString(), 0, 0, 0);
@@ -227,7 +228,7 @@ public class NewBeerActivity extends AppCompatActivity {
             }
             else if (errorText == null) {
                 try {
-                    fermentationAdapter.addItem(fermentationNameEditText.getText().toString(), Double.parseDouble(fermentationQuantityEditText.getText().toString()), Long.parseLong(fermentationTimeEditText.getText().toString()), Integer.parseInt(fermentationTempEditText.getText().toString()));
+                    fermentationAdapter.addItem(fermentationNameEditText.getText().toString(), Float.parseFloat(fermentationQuantityEditText.getText().toString()), Long.parseLong(fermentationTimeEditText.getText().toString()), Integer.parseInt(fermentationTempEditText.getText().toString()));
                 } catch (NumberFormatException e) {
                     fermentationAdapter.addItem(fermentationNameEditText.getText().toString(), 0, 0, 0);
                 }
