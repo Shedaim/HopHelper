@@ -13,11 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import klevente.hu.hophelper.R;
-import klevente.hu.hophelper.adapters.NewBoilingAdapter;
-import klevente.hu.hophelper.adapters.NewFermentationAdapter;
 import klevente.hu.hophelper.adapters.NewIngredientAdapter;
-import klevente.hu.hophelper.adapters.NewIngredientsAdapter;
-import klevente.hu.hophelper.adapters.NewMashingAdapter;
 import klevente.hu.hophelper.constants.Unit;
 import klevente.hu.hophelper.data.Beer;
 
@@ -36,19 +32,19 @@ public class NewBeerActivity extends AppCompatActivity {
     private EditText maltQuantityEditText;
     private Button   addMaltButton;
     private RecyclerView maltsRecyclerView;
-    private NewIngredientsAdapter maltsAdapter;
+    private NewIngredientAdapter maltsAdapter;
 
     private EditText hopNameEditText;
     private EditText hopQuantityEditText;
     private Button   addHopButton;
     private RecyclerView hopsRecyclerView;
-    private NewIngredientsAdapter hopsAdapter;
+    private NewIngredientAdapter hopsAdapter;
 
     private EditText extraNameEditText;
     private EditText extraQuantityEditText;
     private Button   addextraButton;
     private RecyclerView extrasRecyclerView;
-    private NewIngredientsAdapter extrasAdapter;
+    private NewIngredientAdapter extrasAdapter;
 
     private EditText mashTempEditText;
     private EditText mashTimeEditText;
@@ -91,21 +87,21 @@ public class NewBeerActivity extends AppCompatActivity {
         maltQuantityEditText = findViewById(R.id.etBeerMaltQuantity);
         addMaltButton = findViewById(R.id.btnAddMalt);
         maltsRecyclerView = findViewById(R.id.rvNewBeerMalts);
-        maltsAdapter = new NewIngredientsAdapter(Unit.KG);
+        maltsAdapter = new NewIngredientAdapter("ingredient", Unit.KG);
         initRecyclerView(maltsRecyclerView, maltsAdapter);
 
         hopNameEditText = findViewById(R.id.etBeerHopName);
         hopQuantityEditText = findViewById(R.id.etBeerHopQuantity);
         addHopButton = findViewById(R.id.btnAddHop);
         hopsRecyclerView = findViewById(R.id.rvNewBeerHops);
-        hopsAdapter = new NewIngredientsAdapter(Unit.G);
+        hopsAdapter = new NewIngredientAdapter("ingredient", Unit.G);
         initRecyclerView(hopsRecyclerView, hopsAdapter);
 
         extraNameEditText = findViewById(R.id.etBeerExtraName);
         extraQuantityEditText = findViewById(R.id.etBeerExtraQuantity);
         addextraButton = findViewById(R.id.btnAddExtra);
         extrasRecyclerView = findViewById(R.id.rvNewBeerExtras);
-        extrasAdapter = new NewIngredientsAdapter(Unit.G);
+        extrasAdapter = new NewIngredientAdapter("ingredient", Unit.G);
         initRecyclerView(extrasRecyclerView, extrasAdapter);
 
         mashTempEditText = findViewById(R.id.etBeerMashTemp);
@@ -147,9 +143,9 @@ public class NewBeerActivity extends AppCompatActivity {
             EditText errorText = isEditTextValid(maltNameEditText, maltQuantityEditText);
             if (errorText == null) {
                 try {
-                    maltsAdapter.addItem(maltNameEditText.getText().toString(), Double.parseDouble(maltQuantityEditText.getText().toString()));
+                    maltsAdapter.addItem(maltNameEditText.getText().toString(), Float.parseFloat(maltQuantityEditText.getText().toString()),0,0);
                 } catch (NumberFormatException e) {
-                    maltsAdapter.addItem(maltNameEditText.getText().toString(), 0.0);
+                    maltsAdapter.addItem(maltNameEditText.getText().toString(), 0,0,0);
                 }
             } else {
                 errorText.setError(getString(R.string.must_not_be_empty));
@@ -160,9 +156,9 @@ public class NewBeerActivity extends AppCompatActivity {
             EditText errorText = isEditTextValid(hopNameEditText, hopQuantityEditText);
             if (errorText == null) {
                 try {
-                    hopsAdapter.addItem(hopNameEditText.getText().toString(), Double.parseDouble(hopQuantityEditText.getText().toString()));
+                    hopsAdapter.addItem(hopNameEditText.getText().toString(), Float.parseFloat(hopQuantityEditText.getText().toString()),0,0);
                 } catch (NumberFormatException e) {
-                    hopsAdapter.addItem(hopNameEditText.getText().toString(), 0.0);
+                    hopsAdapter.addItem(hopNameEditText.getText().toString(), 0, 0,0);
                 }
             } else {
                 errorText.setError(getString(R.string.must_not_be_empty));
@@ -173,9 +169,9 @@ public class NewBeerActivity extends AppCompatActivity {
             EditText errorText = isEditTextValid(extraNameEditText, extraQuantityEditText);
             if (errorText == null) {
                 try {
-                    extrasAdapter.addItem(extraNameEditText.getText().toString(), Double.parseDouble(extraQuantityEditText.getText().toString()));
+                    extrasAdapter.addItem(extraNameEditText.getText().toString(), Float.parseFloat(extraQuantityEditText.getText().toString()),0 ,0);
                 } catch (NumberFormatException e) {
-                    extrasAdapter.addItem(extraNameEditText.getText().toString(), 0.0);
+                    extrasAdapter.addItem(extraNameEditText.getText().toString(), 0, 0,0);
                 }
             } else {
                 errorText.setError(getString(R.string.must_not_be_empty));

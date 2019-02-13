@@ -41,13 +41,13 @@ public class Beer implements Serializable {
     public Double batchSize;
 
     @ColumnInfo(name = "malts")
-    public Map<String, Double> malts = new HashMap<>();
+    public Map<String, Float> malts = new HashMap<>();
 
     @ColumnInfo(name = "hops")
-    public Map<String, Double> hops = new HashMap<>();
+    public Map<String, Float> hops = new HashMap<>();
 
     @ColumnInfo(name = "extras")
-    public Map<String, Double> extras = new HashMap<>();
+    public Map<String, Float> extras = new HashMap<>();
 
     @ColumnInfo(name = "yeast")
     public String yeast;
@@ -64,7 +64,7 @@ public class Beer implements Serializable {
     public Beer() {}
 
     @Ignore
-    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv, Double batchSize, Map<String, Double> malts, Map<String, Double> hops, Map<String, Double> extras, String yeast) {
+    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv, Double batchSize, Map<String, Float> malts, Map<String, Float> hops, Map<String, Float> extras, String yeast) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -91,15 +91,15 @@ public class Beer implements Serializable {
         this.batchSize = batchSize;
     }
 
-    public void addMalt(String name, double quantity) {
+    public void addMalt(String name, float quantity) {
         malts.put(name, quantity);
     }
 
-    public void addHop(String name, double quantity) {
+    public void addHop(String name, float quantity) {
         hops.put(name, quantity);
     }
 
-    public void addExtra(String name, double quantity) {
+    public void addExtra(String name, float quantity) {
         extras.put(name, quantity);
     }
 

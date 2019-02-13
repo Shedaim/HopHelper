@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import klevente.hu.hophelper.R;
-import klevente.hu.hophelper.adapters.FermentationAdapter;
+import klevente.hu.hophelper.adapters.IngredientAdapter;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 
@@ -40,7 +40,7 @@ public class BeerDetailsFermentationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_beer_details_fermentation, container, false);
 
         RecyclerView fermentationRecyclerView = view.findViewById(R.id.rvFermentation);
-        FermentationAdapter fermentationAdapter = new FermentationAdapter(beer);
+        IngredientAdapter fermentationAdapter = new IngredientAdapter("fermentation", beer);
         fermentationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         fermentationRecyclerView.setAdapter(fermentationAdapter);
 

@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import klevente.hu.hophelper.R;
-import klevente.hu.hophelper.adapters.MashingAdapter;
+import klevente.hu.hophelper.adapters.IngredientAdapter;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 
@@ -40,7 +40,7 @@ public class BeerDetailsMashingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_beer_details_mashing, container, false);
 
         RecyclerView mashingRecyclerView = view.findViewById(R.id.rvMashing);
-        MashingAdapter mashingAdapter = new MashingAdapter(beer);
+        IngredientAdapter mashingAdapter = new IngredientAdapter("mash", beer);
         mashingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mashingRecyclerView.setAdapter(mashingAdapter);
 

@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import klevente.hu.hophelper.R;
-import klevente.hu.hophelper.adapters.BoilingAdapter;
+import klevente.hu.hophelper.adapters.IngredientAdapter;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 
@@ -41,7 +41,7 @@ public class BeerDetailsBoilingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_beer_details_boiling, container, false);
 
         RecyclerView boilingRecyclerView = view.findViewById(R.id.rvBoiling);
-        BoilingAdapter boilingAdapter = new BoilingAdapter(beer);
+        IngredientAdapter boilingAdapter = new IngredientAdapter("boil", beer);
         boilingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         boilingRecyclerView.setAdapter(boilingAdapter);
 

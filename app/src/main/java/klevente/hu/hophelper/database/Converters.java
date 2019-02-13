@@ -17,17 +17,17 @@ import klevente.hu.hophelper.data.Ingredient;
 public class Converters {
 
     @TypeConverter
-    public static Map<String, Double> stringToMapOfStringDouble(String value) {
+    public static Map<String, Float> stringToMapOfStringDouble(String value) {
         if (value == null) {
             return Collections.emptyMap();
         }
-        Type mapType = new TypeToken<HashMap<String, Double>>(){}.getType();
+        Type mapType = new TypeToken<HashMap<String, Float>>(){}.getType();
 
         return gson.fromJson(value, mapType);
     }
 
     @TypeConverter
-    public static String mapOfStringDoubleToString(Map<String, Double> map) {
+    public static String mapOfStringDoubleToString(Map<String, Float> map) {
         return gson.toJson(map);
     }
 
