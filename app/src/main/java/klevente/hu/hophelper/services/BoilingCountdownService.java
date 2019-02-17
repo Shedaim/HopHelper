@@ -22,9 +22,8 @@ import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 import klevente.hu.hophelper.data.Ingredient;
-import klevente.hu.hophelper.events.BoilFinishEvent;
-import klevente.hu.hophelper.events.BoilPauseEvent;
-import klevente.hu.hophelper.events.BoilUpdateEvent;
+import klevente.hu.hophelper.events.BoilEvent;
+
 
 public class BoilingCountdownService extends Service {
     public static final String BEER_INDEX = "index";
@@ -42,14 +41,14 @@ public class BoilingCountdownService extends Service {
         @Override
         public void onTimerTick(long timeRemaining) {
             updateNotification(getString(R.string.boiling_for, grams, name, MinSecondDateFormat.format(timeRemaining)));
-            EventBus.getDefault().post(new BoilUpdateEvent(name, grams, timeRemaining));
+            EventBus.getDefault().post(new Ingredient(name, grams, timeRemaining, 100));
         }
 
         @Override
         public void onTimerFinish() {
             timerIndex++;
             if (timerIndex == timers.size()) {
-                EventBus.getDefault().post(new BoilFinishEvent());
+                EventBus.getDefault().post(new BoilEvent("finish", true));
                 stopSelf();
             } else {
                 timers.get(timerIndex).startTimer();
@@ -58,14 +57,23 @@ public class BoilingCountdownService extends Service {
     }
 
     @Subscribe
-    public void onMashPauseEvent(BoilPauseEvent event) {
-        if (event.paused) {
-            timers.get(timerIndex).pauseTimer();
-            updateNotification(getString(R.string.boiling_for, timers.get(timerIndex).grams, timers.get(timerIndex).name, getString(R.string.paused)));
-        } else {
-            timers.get(timerIndex).resumeTimer();
+    public void onBoilEvent(BoilEvent event) {
+        switch (event.action) {
+            case "pause":
+                if (event.paused) {
+                    timers.get(timerIndex).pauseTimer();
+                    updateNotification(getString(R.string.boiling_for, timers.get(timerIndex).grams, timers.get(timerIndex).name, getString(R.string.paused)));
+                } else {
+                    timers.get(timerIndex).resumeTimer();
+                }
+                break;
+            case "stop":
+                timers.get(timerIndex).stopTimer();
+                //updateNotification(getString(R.string.boiling_for, timers.get(timerIndex).grams, timers.get(timerIndex).name, getString(R.string.stopped)));
+                break;
+            case "finish":
+                break;
         }
-
     }
 
     private int beerIdx;

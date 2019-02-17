@@ -22,9 +22,8 @@ import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
 import klevente.hu.hophelper.data.Ingredient;
-import klevente.hu.hophelper.events.MashFinishEvent;
-import klevente.hu.hophelper.events.MashPauseEvent;
-import klevente.hu.hophelper.events.MashUpdateEvent;
+import klevente.hu.hophelper.events.MashEvent;
+
 
 public class MashingCountdownService extends Service {
     public static final String BEER_INDEX = "index";
@@ -32,7 +31,7 @@ public class MashingCountdownService extends Service {
     private static final int NOTIF_ID = 480;
 
     private class TimerHourglass extends Hourglass {
-        float temp;
+        private float temp;
         TimerHourglass(Ingredient time) {
             super(time.time, 1000);
             this.temp = time.temp;
@@ -41,14 +40,14 @@ public class MashingCountdownService extends Service {
         @Override
         public void onTimerTick(long timeRemaining) {
             updateNotification(getString(R.string.mashing_at, temp, MinSecondDateFormat.format(timeRemaining)));
-            EventBus.getDefault().post(new MashUpdateEvent(temp, timeRemaining));
+            EventBus.getDefault().post(new Ingredient("", 0, timeRemaining, temp));
         }
 
         @Override
         public void onTimerFinish() {
             timerIndex++;
             if (timerIndex == timers.size()) {
-                EventBus.getDefault().post(new MashFinishEvent());
+                EventBus.getDefault().post(new MashEvent("finish", true));
                 stopSelf();
             } else {
                 timers.get(timerIndex).startTimer();
@@ -56,15 +55,24 @@ public class MashingCountdownService extends Service {
         }
     }
 
-
     @Subscribe
-    public void onMashPauseEvent(MashPauseEvent event) {
-        if (event.paused) {
-            timers.get(timerIndex).pauseTimer();
-            updateNotification(getString(R.string.mashing_at, timers.get(timerIndex).temp, getString(R.string.paused)));
-        } else {
-            timers.get(timerIndex).resumeTimer();
+    public void onMashEvent(MashEvent event) {
+        switch (event.action) {
+            case "pause":
+                if (event.paused) {
+                    timers.get(timerIndex).pauseTimer();
+                    updateNotification(getString(R.string.mashing_at, timers.get(timerIndex).temp, getString(R.string.paused)));
+                } else {
+                    timers.get(timerIndex).resumeTimer();
+                }
+                break;
+            case "stop":
+                timers.get(timerIndex).stopTimer();
+                break;
+            case "finish":
+                break;
         }
+
 
     }
 

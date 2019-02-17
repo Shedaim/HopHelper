@@ -7,15 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.NewIngredientAdapter;
 import klevente.hu.hophelper.constants.Unit;
 import klevente.hu.hophelper.data.Beer;
+import klevente.hu.hophelper.data.Ingredient;
 
 public class NewBeerActivity extends AppCompatActivity {
 
@@ -66,6 +73,9 @@ public class NewBeerActivity extends AppCompatActivity {
     private Button   addFermentationTimeButton;
     private RecyclerView fermentationTimeRecyclerView;
     private NewIngredientAdapter fermentationAdapter;
+
+    boolean EDITING = false;
+    Beer editedBeer;
 
     private void initRecyclerView(RecyclerView view, RecyclerView.Adapter adapter) {
         view.setLayoutManager(new LinearLayoutManager(this));
@@ -293,6 +303,66 @@ public class NewBeerActivity extends AppCompatActivity {
         getContentView();
         setClickListeners();
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            EDITING = true;
+            editedBeer = new Beer();
+            editedBeer.name = extras.get("name").toString();
+            nameEditText.setText(editedBeer.name);
+            editedBeer.style = extras.get("style").toString();
+            styleEditText.setText(editedBeer.style);
+            editedBeer.description = extras.get("description").toString();
+            descriptionEditText.setText(editedBeer.description);
+            editedBeer.batchSize = (Double) extras.get("batchsize");
+            batchSizeEditText.setText(editedBeer.batchSize.toString());
+            editedBeer.abv = (Double) extras.get("abv");
+            abvEditText.setText(editedBeer.abv.toString());
+            editedBeer.og = (Integer) extras.get("og");
+            ogEditText.setText(editedBeer.og.toString());
+            editedBeer.fg = (Integer) extras.get("fg");
+            fgEditText.setText(editedBeer.fg.toString());
+            editedBeer.yeast = extras.get("yeast").toString();
+            yeastEditText.setText(editedBeer.yeast);
+
+            HashMap<String, Float> malts = (HashMap<String, Float>) extras.getSerializable("malts");
+            for (Map.Entry<String, Float> entry : malts.entrySet()) {
+                maltsAdapter.addItem(entry.getKey(), Float.parseFloat(String.valueOf(entry.getValue())),0,0);
+            }
+            editedBeer.malts = maltsAdapter.getIngredientMap();
+
+            HashMap<String, Float> hops = (HashMap<String, Float>) extras.getSerializable("hops");
+            for (Map.Entry<String, Float> entry : hops.entrySet()) {
+                hopsAdapter.addItem(entry.getKey(), Float.parseFloat(String.valueOf(entry.getValue())),0,0);
+            }
+            editedBeer.hops = hopsAdapter.getIngredientMap();
+
+            HashMap<String, Float> _extras = (HashMap<String, Float>) extras.getSerializable("extras");
+            for (Map.Entry<String, Float> entry : _extras.entrySet()) {
+                extrasAdapter.addItem(entry.getKey(), Float.parseFloat(String.valueOf(entry.getValue())),0,0);
+            }
+            editedBeer.extras = extrasAdapter.getIngredientMap();
+
+            List<Ingredient> mashing_times =  (List<Ingredient>) extras.getSerializable("mashingTimes");
+            for (int i=0; i<mashing_times.size(); i++) {
+                Ingredient item = mashing_times.get(i);
+                mashTimeAdapter.addItem("", 0, Long.parseLong(String.valueOf(item.time)), Float.parseFloat(String.valueOf(item.temp)));
+            }
+            editedBeer.mashingTimes = mashTimeAdapter.getMashTimeList();
+
+            List<Ingredient> boil_times =  (List<Ingredient>) extras.getSerializable("boilTimes");
+            for (int i=0; i<boil_times.size(); i++) {
+                Ingredient item = boil_times.get(i);
+                boilAdapter.addItem(item.name, Float.parseFloat(String.valueOf(item.quantity)), Long.parseLong(String.valueOf(item.time)), 100);
+            }
+            editedBeer.boilingTimes = boilAdapter.getHopAdditionList();
+
+            List<Ingredient> ferment_times =  (List<Ingredient>) extras.getSerializable("fermentationTimes");
+            for (int i=0; i<ferment_times.size(); i++) {
+                Ingredient item = ferment_times.get(i);
+                fermentationAdapter.addItem(item.name, Float.parseFloat(String.valueOf(item.quantity)), Long.parseLong(String.valueOf(item.time)), Float.parseFloat(String.valueOf(item.temp)));
+            }
+            editedBeer.fermentationTimes = fermentationAdapter.getFermentationTimeList();
+        }
     }
 
     @Override
@@ -303,9 +373,16 @@ public class NewBeerActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Beer newBeer;
+        if (EDITING){
+            newBeer = editedBeer;
+            EDITING = false;
+        }
+        else {
+            newBeer = getBeer();
+        }
         switch (item.getItemId()) {
             case R.id.action_add:
-                Beer newBeer = getBeer();
                 if (newBeer != null) {
                     Intent result = new Intent();
                     result.putExtra("beer", newBeer);

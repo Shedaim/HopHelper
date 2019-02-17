@@ -64,7 +64,7 @@ public class Beer implements Serializable {
     public Beer() {}
 
     @Ignore
-    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv, Double batchSize, Map<String, Float> malts, Map<String, Float> hops, Map<String, Float> extras, String yeast) {
+    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv, Double batchSize, HashMap<String, Float> malts, HashMap<String, Float> hops, HashMap<String, Float> extras, String yeast) {
         this.id = id;
         this.name = name;
         this.description = description;

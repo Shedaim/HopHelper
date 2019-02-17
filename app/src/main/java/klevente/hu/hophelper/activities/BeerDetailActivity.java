@@ -3,7 +3,6 @@ package klevente.hu.hophelper.activities;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -13,7 +12,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
+import java.io.Serializable;
 
 import klevente.hu.hophelper.fragments.BeerDetailIngrendientsFragment;
 import klevente.hu.hophelper.fragments.BeerDetailsBoilingFragment;
@@ -26,7 +31,7 @@ import klevente.hu.hophelper.services.BoilingCountdownService;
 import klevente.hu.hophelper.services.MashingCountdownService;
 
 public class BeerDetailActivity extends AppCompatActivity {
-
+    public static final int EDIT_BEER = 100;
     public static final String BEER_INDEX = "index";
     //private static final int REQUEST_CODE_SIGN_IN = 0;
     //private static final int REQUEST_CODE_OPEN_ITEM = 1;
@@ -34,6 +39,7 @@ public class BeerDetailActivity extends AppCompatActivity {
     private Beer beer;
     private int beerIdx;
 
+    private FloatingActionMenu fabMenu;
     private FloatingActionButton fabEdit;
     private FloatingActionButton fabStartMash;
     private FloatingActionButton fabStartBoil;
@@ -64,12 +70,10 @@ public class BeerDetailActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.beer_detail_tabs);
-        tabLayout.addOnTabSelectedListener(onTabSelectedListener);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
 
-        viewPager.addOnPageChangeListener(onPageChangeListener);
 
         initFabs();
 
@@ -271,17 +275,32 @@ public class BeerDetailActivity extends AppCompatActivity {
     }
 
     private void initFabs() {
+        fabMenu = findViewById(R.id.fabMenu);
         fabEdit = findViewById(R.id.fabBeerDetailEdit);
         fabStartMash = findViewById(R.id.fabBeerDetailStartMash);
         fabStartBoil = findViewById(R.id.fabBeerDetailStartBoil);
         fabStartFermentation = findViewById(R.id.fabBeerDetailStartFermentation);
 
-        fabEdit.show();
-        fabStartMash.hide();
-        fabStartBoil.hide();
-        fabStartFermentation.hide();
-
-        fabEdit.setOnClickListener(v -> Snackbar.make(v, R.string.not_implemented, Snackbar.LENGTH_SHORT));
+        fabEdit.setOnClickListener(v -> {
+            //TODO Add fermentation period to calendar
+            Snackbar.make(v, R.string.not_implemented, Snackbar.LENGTH_SHORT).show();
+            Intent intent = new Intent(BeerDetailActivity.this, NewBeerActivity.class);
+            intent.putExtra("name",beer.name);
+            intent.putExtra("style",beer.style);
+            intent.putExtra("description",beer.description);
+            intent.putExtra("batchsize",beer.batchSize);
+            intent.putExtra("abv",beer.abv);
+            intent.putExtra("og",beer.og);
+            intent.putExtra("fg",beer.fg);
+            intent.putExtra("yeast",beer.yeast);
+            intent.putExtra("malts", (Serializable) beer.malts);
+            intent.putExtra("hops", (Serializable) beer.hops);
+            intent.putExtra("extras", (Serializable) beer.extras);
+            intent.putExtra("mashingTimes", (Serializable) beer.mashingTimes);
+            intent.putExtra("boilTimes", (Serializable) beer.boilingTimes);
+            intent.putExtra("fermentationTimes", (Serializable) beer.fermentationTimes);
+            startActivityForResult(intent, EDIT_BEER);
+        });
 
         fabStartMash.setOnClickListener(v -> {
             Intent intent = new Intent(BeerDetailActivity.this, MashingCountdownService.class);
@@ -307,64 +326,7 @@ public class BeerDetailActivity extends AppCompatActivity {
 
         fabStartFermentation.setOnClickListener(v -> {
             //TODO Add fermentation period to calendar
-            Toast.makeText(this,"Not implemented yet", Toast.LENGTH_SHORT).show();
+            Snackbar.make(v, R.string.not_implemented, Snackbar.LENGTH_SHORT).show();
         });
     }
-
-    private void animateFab(int position) {
-        switch (position) {
-            case 0:
-                fabEdit.show();
-                fabStartMash.hide();
-                fabStartBoil.hide();
-                fabStartFermentation.hide();
-                break;
-            case 1:
-                fabStartMash.show();
-                fabEdit.hide();
-                fabStartBoil.hide();
-                fabStartFermentation.hide();
-                break;
-            case 2:
-                fabStartBoil.show();
-                fabEdit.hide();
-                fabStartMash.hide();
-                fabStartFermentation.hide();
-                break;
-            case 3:
-                fabStartFermentation.show();
-                fabStartBoil.hide();
-                fabEdit.hide();
-                fabStartMash.hide();
-                break;
-            default:
-                fabEdit.show();
-                fabStartMash.hide();
-                fabStartBoil.hide();
-                fabStartFermentation.hide();
-                break;
-        }
-    }
-
-    TabLayout.OnTabSelectedListener onTabSelectedListener = new TabLayout.OnTabSelectedListener() {
-        @Override
-        public void onTabSelected(TabLayout.Tab tab) { animateFab(tab.getPosition()); }
-
-        @Override
-        public void onTabUnselected(TabLayout.Tab tab) {}
-
-        @Override
-        public void onTabReselected(TabLayout.Tab tab) {}
-    };
-
-    ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int i, float v, int i1) {}
-
-        @Override
-        public void onPageSelected(int i) { animateFab(i); }
-
-        @Override
-        public void onPageScrollStateChanged(int i) {}
-    };
 }

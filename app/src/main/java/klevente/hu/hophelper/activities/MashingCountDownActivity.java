@@ -2,10 +2,12 @@ package klevente.hu.hophelper.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -13,9 +15,9 @@ import org.greenrobot.eventbus.Subscribe;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.constants.MinSecondDateFormat;
 import klevente.hu.hophelper.data.BeerList;
-import klevente.hu.hophelper.events.MashFinishEvent;
-import klevente.hu.hophelper.events.MashPauseEvent;
-import klevente.hu.hophelper.events.MashUpdateEvent;
+import klevente.hu.hophelper.data.Ingredient;
+import klevente.hu.hophelper.events.MashEvent;
+
 
 import static klevente.hu.hophelper.activities.BeerDetailActivity.BEER_INDEX;
 
@@ -32,16 +34,19 @@ public class MashingCountDownActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
+        FloatingActionMenu fab = findViewById(R.id.fab);
+        FloatingActionButton stop_fab = findViewById(R.id.stop_fab);
+        FloatingActionButton play_pause_fab = findViewById(R.id.play_pause_fab);
+        play_pause_fab.setOnClickListener(v -> {
             paused = !paused;
             if (paused) {
-                fab.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                play_pause_fab.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
             } else {
-                fab.setImageDrawable(getDrawable(R.drawable.ic_pause_black_24dp));
+                play_pause_fab.setImageDrawable(getDrawable(R.drawable.ic_pause_black_24dp));
             }
-            EventBus.getDefault().post(new MashPauseEvent(paused));
+            EventBus.getDefault().post(new MashEvent("pause", paused));
         });
+        stop_fab.setOnClickListener(v -> EventBus.getDefault().post(new MashEvent("stop", true)));
 
         mashTextView = findViewById(R.id.tvMashCountDown);
         TextView nameTextView = findViewById(R.id.tvMashCountDownName);
@@ -51,18 +56,28 @@ public class MashingCountDownActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onMashUpdateEvent(MashUpdateEvent event) {
-        mashTextView.setText(getString(R.string.mashing_at, event.temp, MinSecondDateFormat.format(event.millis)));
+    public void onMashUpdateEvent(Ingredient event) {
+        mashTextView.setText(getString(R.string.mashing_at, event.temp, MinSecondDateFormat.format(event.time)));
     }
 
     @Subscribe
-    public void onMashFinishEvent(MashFinishEvent event) {
-        Intent intent = new Intent(MashingCountDownActivity.this, BeerDetailActivity.class);
-        intent.putExtra(BEER_INDEX, beerIdx);
-        startActivity(intent);
+    public void onMashEvent(MashEvent event) {
+        Intent intent;
+        switch (event.action) {
+            case "stop":
+                intent = new Intent(MashingCountDownActivity.this, BeerDetailActivity.class);
+                intent.putExtra(BEER_INDEX, beerIdx);
+                startActivity(intent);
+                break;
+            case "finish":
+                intent = new Intent(MashingCountDownActivity.this, BeerDetailActivity.class);
+                intent.putExtra(BEER_INDEX, beerIdx);
+                startActivity(intent);
+                break;
+            case "pause":
+                break;
+        }
     }
-
-
 
     @Override
     protected void onStart() {

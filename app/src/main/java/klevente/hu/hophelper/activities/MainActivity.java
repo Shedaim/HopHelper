@@ -18,7 +18,6 @@ import java.util.List;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.adapters.MainBeerAdapter;
 import klevente.hu.hophelper.data.Beer;
-import klevente.hu.hophelper.data.BeerList;
 import klevente.hu.hophelper.database.HopHelperDatabase;
 
 
