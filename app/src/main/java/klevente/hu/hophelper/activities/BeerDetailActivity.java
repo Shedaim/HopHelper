@@ -1,6 +1,9 @@
 package klevente.hu.hophelper.activities;
 
+import android.app.Activity;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,6 +24,7 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import java.io.Serializable;
 
+import klevente.hu.hophelper.database.HopHelperDatabase;
 import klevente.hu.hophelper.fragments.BeerDetailIngrendientsFragment;
 import klevente.hu.hophelper.fragments.BeerDetailsBoilingFragment;
 import klevente.hu.hophelper.fragments.BeerDetailsFermentationFragment;
@@ -31,7 +36,7 @@ import klevente.hu.hophelper.services.BoilingCountdownService;
 import klevente.hu.hophelper.services.MashingCountdownService;
 
 public class BeerDetailActivity extends AppCompatActivity {
-    public static final int EDIT_BEER = 100;
+    private static final int EDIT_BEER = 101;
     public static final String BEER_INDEX = "index";
     //private static final int REQUEST_CODE_SIGN_IN = 0;
     //private static final int REQUEST_CODE_OPEN_ITEM = 1;
@@ -285,20 +290,7 @@ public class BeerDetailActivity extends AppCompatActivity {
             //TODO Add fermentation period to calendar
             Snackbar.make(v, R.string.not_implemented, Snackbar.LENGTH_SHORT).show();
             Intent intent = new Intent(BeerDetailActivity.this, NewBeerActivity.class);
-            intent.putExtra("name",beer.name);
-            intent.putExtra("style",beer.style);
-            intent.putExtra("description",beer.description);
-            intent.putExtra("batchsize",beer.batchSize);
-            intent.putExtra("abv",beer.abv);
-            intent.putExtra("og",beer.og);
-            intent.putExtra("fg",beer.fg);
-            intent.putExtra("yeast",beer.yeast);
-            intent.putExtra("malts", (Serializable) beer.malts);
-            intent.putExtra("hops", (Serializable) beer.hops);
-            intent.putExtra("extras", (Serializable) beer.extras);
-            intent.putExtra("mashingTimes", (Serializable) beer.mashingTimes);
-            intent.putExtra("boilTimes", (Serializable) beer.boilingTimes);
-            intent.putExtra("fermentationTimes", (Serializable) beer.fermentationTimes);
+            intent.putExtra("beer", beer);
             startActivityForResult(intent, EDIT_BEER);
         });
 
@@ -328,5 +320,19 @@ public class BeerDetailActivity extends AppCompatActivity {
             //TODO Add fermentation period to calendar
             Snackbar.make(v, R.string.not_implemented, Snackbar.LENGTH_SHORT).show();
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDIT_BEER){
+            if (resultCode == RESULT_OK){
+                Intent result = new Intent();
+                result.putExtra("beer", data.getSerializableExtra("beer"));
+                result.putExtra("old_beer", data.getSerializableExtra("old_beer"));
+                setResult(Activity.RESULT_OK, result);
+                finish();
+            }
+        }
     }
 }

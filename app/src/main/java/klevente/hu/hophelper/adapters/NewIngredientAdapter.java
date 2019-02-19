@@ -71,7 +71,7 @@ public class NewIngredientAdapter extends RecyclerView.Adapter<NewIngredientAdap
                 hopAdditions.add(new Ingredient(name, quantity, TimeUnit.MINUTES.toMillis(time), 100));
                 break;
             case "fermentation":
-                fermentationTimes.add(new Ingredient(name, quantity, time, temp));
+                fermentationTimes.add(new Ingredient(name, quantity, TimeUnit.MILLISECONDS.toDays(time), temp));
                 break;
             case "ingredient":
                 ingredients.add(new Pair<>(name, quantity));
@@ -147,7 +147,7 @@ public class NewIngredientAdapter extends RecyclerView.Adapter<NewIngredientAdap
                 addition = fermentationTimes.get(position);
                 holder.nameTextView.setText(addition.name);
                 holder.quantityTextView.setText(context.getString(R.string.g, addition.quantity));
-                holder.timeTextView.setText(context.getString(R.string.days, addition.time));
+                holder.timeTextView.setText(MinSecondDateFormat.format(addition.time));
                 holder.tempTextView.setText(context.getString(R.string.celsius, addition.temp));
                 holder.addition = addition;
                 break;

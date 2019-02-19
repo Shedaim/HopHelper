@@ -77,4 +77,29 @@
     <string name="start_boil">Start Boil</string>
     <string name="start_fermentation">Add fermentation to calendar</string>
     <string name="stopped">Stopped</string>
+    <string name="select_hop">--Select-hop--</string>
+    <string name="select_malt">--Select-malt--</string>
+    <string name="select_extra">--Select-extra--</string>
+
+    <string-array name="malts_array">
+        <item>Add malt name</item>
+        <item>Barley</item>
+        <item>Caramel</item>
+        <item>Wheat</item>
+    </string-array>
+
+    <string-array name="hops_array">
+        <item>Add hop name</item>
+        <item>Amarillo</item>
+        <item>Citra</item>
+        <item>Sapphire</item>
+    </string-array>
+
+    <string-array name="extras_array">
+        <item>Add hop name</item>
+        <item>Coriander</item>
+        <item>Orange peel</item>
+        <item>Sugar</item>
+    </string-array>
+
 </resources>

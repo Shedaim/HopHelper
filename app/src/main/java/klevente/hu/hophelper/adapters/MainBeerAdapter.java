@@ -1,5 +1,6 @@
 package klevente.hu.hophelper.adapters;
 
+import android.arch.persistence.room.Index;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -68,6 +69,19 @@ public class MainBeerAdapter extends RecyclerView.Adapter<MainBeerAdapter.BeerVi
     public void addItem(Beer item) {
         BeerList.add(item);
         notifyItemInserted(BeerList.size() - 1);
+    }
+
+    public void removeItem(Beer item) {
+        int item_index = BeerList.get_index(item);
+        if (item_index != -1){
+            BeerList.remove(item);
+            notifyItemRemoved(item_index);
+        }
+    }
+
+    public void updateItem(Beer _new, Beer old) {
+        removeItem(old);
+        addItem(_new);
     }
 
     class BeerViewHolder extends RecyclerView.ViewHolder {

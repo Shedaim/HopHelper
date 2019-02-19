@@ -88,7 +88,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
                 holder.nameTextView.setText(ferment.name);
                 holder.quantityTextView.setText(context.getString(R.string.g, ferment.quantity));
                 holder.tempTextView.setText(context.getString(R.string.celsius, ferment.temp));
-                holder.timeTextView.setText(context.getString(R.string.days, ferment.time));
+                holder.timeTextView.setText(context.getString(R.string.days, TimeUnit.MILLISECONDS.toDays(ferment.time)));
                 break;
             case "ingredient":
                 Map.Entry<String, Float> ingredient = ingredients.get(position);

@@ -48,4 +48,10 @@ public class BeerList {
             return list.remove(e);
         }
     }
+
+    public static int get_index(Beer e) {
+        synchronized (sync) {
+            return list.indexOf(e);
+        }
+    }
 }
