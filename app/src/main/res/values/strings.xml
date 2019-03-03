@@ -80,6 +80,11 @@
     <string name="select_hop">--Select-hop--</string>
     <string name="select_malt">--Select-malt--</string>
     <string name="select_extra">--Select-extra--</string>
+    <string name="save">Save to Drive</string>
+    <string name="save_dialog_duplicate">Another file with the same name already exists.\n What would you like to do?</string>
+    <string name="save_and_replace">Save and replace</string>
+    <string name="save_and_keep">Save and keep</string>
+
 
     <string-array name="malts_array">
         <item>Add malt name</item>

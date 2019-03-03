@@ -20,6 +20,29 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+    signingConfigs{
+        key{
+            keyAlias 'keystore'
+            keyPassword 'Aa123456'
+            storeFile file('C:\\Users\\WBK834\\Documents\\keystore2.jks')
+            storePassword 'Aa123456'
+        }
+    }
+    buildTypes {
+        debug{
+            signingConfig signingConfigs.key
+        }
+    }
 }
 
 dependencies {
@@ -40,6 +63,14 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.android.gms:play-services-drive:16.0.0'
     implementation 'com.github.clans:fab:1.6.2'
+
+    implementation 'com.google.http-client:google-http-client-gson:1.26.0'
+    implementation('com.google.api-client:google-api-client-android:1.26.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
 
 
 }

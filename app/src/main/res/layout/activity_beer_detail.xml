@@ -148,6 +148,16 @@
             fab:fab_label="@string/start_fermentation"
             fab:fab_size="mini"/>
 
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/save_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_weight="1"
+            android:src="@drawable/ic_save_file_to_drive"
+            fab:fab_label="@string/save"
+            fab:fab_size="mini"/>
+
     </com.github.clans.fab.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>
