@@ -84,6 +84,8 @@
     <string name="save_dialog_duplicate">Another file with the same name already exists.\n What would you like to do?</string>
     <string name="save_and_replace">Save and replace</string>
     <string name="save_and_keep">Save and keep</string>
+    <string name="successful_save">Successfully saved file %1$s to Drive</string>
+    <string name="failed_to_save">Failed to save file %1$s to Drive</string>
 
 
     <string-array name="malts_array">

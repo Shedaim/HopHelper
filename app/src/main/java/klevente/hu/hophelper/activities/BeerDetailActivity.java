@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,11 +55,13 @@ public class BeerDetailActivity extends AppCompatActivity {
     String TAG = "BeerDetail";
     String fileName, fileContent;
     FileList file_list;
+    boolean duplicate_file;
+    ViewPager viewPager;
     private Beer beer;
     private int beerIdx;
     private DriveServiceHelper mDriveServiceHelper;
     private volatile String mOpenFileId;
-    ViewPager viewPager;
+
 
     @Override
     protected void onStart() {
@@ -168,6 +171,77 @@ public class BeerDetailActivity extends AppCompatActivity {
                     .addOnFailureListener(exception ->
                             Log.e(TAG, "Unable to open file from picker.", exception));
         }
+    }
+     */
+     private void createAndSaveFile(final String fileName, final String fileContent) {
+         if (mDriveServiceHelper != null && fileName != null && fileContent != null) {
+             mDriveServiceHelper.createFile()
+                     .addOnSuccessListener(fileId -> mDriveServiceHelper.saveFile(fileId, fileName, fileContent)
+                             .addOnSuccessListener(name -> Snackbar.make(viewPager, getString(R.string.successful_save, name), Snackbar.LENGTH_SHORT).show())
+                             .addOnFailureListener(exception -> {
+                                 Log.e(TAG, "Unable to save file to Drive.", exception);
+                                 Snackbar.make(viewPager, getString(R.string.failed_to_save, fileName), Snackbar.LENGTH_SHORT).show();
+                             })
+                     )
+                     .addOnFailureListener(exception -> {
+                         Log.e(TAG, "Unable to create a new file.", exception);
+                         Snackbar.make(viewPager, getString(R.string.failed_to_save, fileName), Snackbar.LENGTH_SHORT).show();
+                     });
+         }
+     }
+    /**
+     * Saves a beer object into a new json file
+     * @param fileName
+     * @param fileContent
+     */
+    private void saveBeerToFile(final String fileName, final String fileContent) {
+        if (mDriveServiceHelper != null && fileName != null && fileContent != null) {
+            Log.d(TAG, "Querying existing files");
+            mDriveServiceHelper.queryFiles()
+                .addOnSuccessListener(fileList -> {
+                    for(File f : fileList.getFiles()){
+                        if (f.getName().equals(fileName)){
+                            Log.d(TAG, "Found exiting file with the same name");
+                            duplicate_file = true;
+                            final Dialog dialog = new Dialog(BeerDetailActivity.this);
+                            dialog.setContentView(R.layout.save_file_dialog);
+                            dialog.setTitle("Save File to Drive...");
+
+                            Button saveAndReplace = dialog.findViewById(R.id.btn_save_and_replace);
+                            Button saveAndKeep = dialog.findViewById(R.id.btn_save_and_keep);
+                            Button cancel = dialog.findViewById(R.id.btn_cancel);
+
+                            saveAndReplace.setOnClickListener(v1 -> {
+                                dialog.dismiss();
+                                mDriveServiceHelper.saveFile(f.getId(), fileName, fileContent)
+                                    .addOnSuccessListener(name -> Snackbar.make(viewPager, getString(R.string.successful_save, name), Snackbar.LENGTH_SHORT).show())
+                                    .addOnFailureListener(exception -> {
+                                        Log.e(TAG, "Unable to save file to Drive.", exception);
+                                        Snackbar.make(viewPager, getString(R.string.failed_to_save, fileName), Snackbar.LENGTH_SHORT).show();
+                                    });
+                            });
+
+                            saveAndKeep.setOnClickListener(v1 -> {
+                                dialog.dismiss();
+                                Time now = new Time();
+                                now.setToNow();
+                                createAndSaveFile(fileName + now.toString(), fileContent);
+                            });
+
+                            cancel.setOnClickListener(v1 -> {
+                                dialog.dismiss();
+                                Snackbar.make(viewPager, "Save to drive canceled by user", Snackbar.LENGTH_SHORT).show();
+                            });
+
+                            dialog.show();
+                            break;
+                        }
+                    }
+                    if (!duplicate_file){
+                        createAndSaveFile(fileName, fileContent);
+                    }
+                });
+            }
     }
 
     /**
@@ -407,46 +481,10 @@ public class BeerDetailActivity extends AppCompatActivity {
         });
 
         fabSaveToDrive.setOnClickListener(v -> {
-            createFile();
             fileName = beer.name + ".json";
             Gson gson = new Gson();
             String fileContent = gson.toJson(beer);
-            query();
-            Log.d(TAG, String.valueOf(file_list));
-            if (file_list.isEmpty()){
-                saveFile(fileName, fileContent);
-            }
-            else{
-                for (File file : file_list.getFiles()){
-                    // Check if file already exists
-                    if (file.getName().equals(fileName)){
-                        final Dialog dialog = new Dialog(getApplicationContext());
-                        dialog.setContentView(R.layout.save_file_dialog);
-                        dialog.setTitle("Save File to Drive...");
-
-                        Button saveAndReplace = dialog.findViewById(R.id.btn_save_and_replace);
-                        Button saveAndKeep = dialog.findViewById(R.id.btn_save_and_keep);
-                        Button cancel = dialog.findViewById(R.id.btn_cancel);
-                        // if button is clicked, close the custom dialog
-                        //TODO Add option for user to save on top of old item or update version or cancel
-                        saveAndReplace.setOnClickListener(v1 -> {
-                            Snackbar.make(v1, R.string.not_implemented, Snackbar.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        });
-                        saveAndKeep.setOnClickListener(v1 -> {
-                            saveFile(fileName, fileContent);
-                            Snackbar.make(v1, R.string.not_implemented, Snackbar.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        });
-                        cancel.setOnClickListener(v1 -> {
-                            Snackbar.make(v1, "Save to drive canceled", Snackbar.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        });
-                        dialog.show();
-                        break;
-                    }
-                }
-            }
+            saveBeerToFile(fileName, fileContent);
         });
     }
 

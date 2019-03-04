@@ -98,7 +98,7 @@ public class DriveServiceHelper {
      * Updates the file identified by {@code fileId} with the given {@code name} and {@code
      * content}.
      */
-    public Task<Void> saveFile(String fileId, String name, String content) {
+    public Task<String> saveFile(String fileId, String name, String content) {
         return Tasks.call(mExecutor, () -> {
             // Create a File containing any metadata changes.
             File metadata = new File().setName(name);
@@ -108,7 +108,7 @@ public class DriveServiceHelper {
 
             // Update the metadata and contents.
             mDriveService.files().update(fileId, metadata, contentStream).execute();
-            return null;
+            return name;
         });
     }
 
