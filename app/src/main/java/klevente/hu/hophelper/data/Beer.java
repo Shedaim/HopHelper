@@ -7,12 +7,15 @@ import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -26,8 +29,14 @@ public class Beer implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public long id;
 
+    @ColumnInfo(name = "file_id")
+    public String file_id;
+
     @ColumnInfo(name = "name")
     public String name;
+
+    @ColumnInfo(name = "version")
+    public int version;
 
     @ColumnInfo(name = "description")
     public String description;
@@ -71,9 +80,10 @@ public class Beer implements Serializable {
     public Beer() {}
 
     @Ignore
-    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv, Double batchSize, HashMap<String, Float> malts, HashMap<String, Float> hops, HashMap<String, Float> extras, String yeast) {
+    public Beer(long id, String name, int version, String description, String style, Integer og, Integer fg, Double abv, Double batchSize, HashMap<String, Float> malts, HashMap<String, Float> hops, HashMap<String, Float> extras, String yeast) {
         this.id = id;
         this.name = name;
+        this.version = version;
         this.description = description;
         this.style = style;
         this.og = og;
@@ -87,15 +97,74 @@ public class Beer implements Serializable {
     }
 
     @Ignore
-    public Beer(long id, String name, String description, String style, Integer og, Integer fg, Double abv, Double batchSize) {
+    public Beer(long id, String name, int version, String description, String style, Integer og, Integer fg, Double abv, Double batchSize) {
         this.id = id;
         this.name = name;
+        this.version = version;
         this.description = description;
         this.style = style;
         this.og = og;
         this.fg = fg;
         this.abv = abv;
         this.batchSize = batchSize;
+    }
+
+    public static Beer fileToBeer(String content) throws JSONException {
+        JSONObject beer_file = new JSONObject(content);
+        Beer beer = new Beer();
+        beer.name = beer_file.getString("name");
+        beer.version = Integer.parseInt(beer_file.getString("version"));
+        beer.style = beer_file.getString("style");
+        beer.batchSize = Double.valueOf(beer_file.getString("batchSize"));
+        beer.description = beer_file.getString("description");
+        beer.abv = Double.valueOf(beer_file.getString("abv"));
+        beer.og = Integer.valueOf(beer_file.getString("og"));
+        beer.fg = Integer.valueOf(beer_file.getString("fg"));
+        beer.yeast = beer_file.getString("yeast");
+
+        JSONObject arr;
+        arr = beer_file.getJSONObject("malts");
+        for (Iterator<String> it = arr.keys(); it.hasNext(); ) {
+            String i = it.next();
+            beer.malts.put(i, Float.valueOf(arr.getString(i)));
+        }
+        arr = beer_file.getJSONObject("hops");
+        for (Iterator<String> it = arr.keys(); it.hasNext(); ) {
+            String i = it.next();
+            beer.hops.put(i, Float.valueOf(arr.getString(i)));
+        }
+        arr = beer_file.getJSONObject("extras");
+        for (Iterator<String> it = arr.keys(); it.hasNext(); ) {
+            String i = it.next();
+            beer.extras.put(i, Float.valueOf(arr.getString(i)));
+        }
+
+        JSONArray arr2;
+        arr2 = beer_file.getJSONArray("mashingTimes");
+        for (int i = 0; i < arr2.length(); i++) {
+            JSONObject json = arr2.getJSONObject(i);
+            beer.mashingTimes.add(new Ingredient(json.getString("name"),
+                    Float.parseFloat(json.getString("quantity")),
+                    Long.parseLong(json.getString("time")),
+                    Float.parseFloat(json.getString("temp"))));
+        }
+        arr2 = beer_file.getJSONArray("boilingTimes");
+        for (int i = 0; i < arr2.length(); i++) {
+            JSONObject json = arr2.getJSONObject(i);
+            beer.boilingTimes.add(new Ingredient(json.getString("name"),
+                    Float.parseFloat(json.getString("quantity")),
+                    Long.parseLong(json.getString("time")),
+                    Float.parseFloat(json.getString("temp"))));
+        }
+        arr2 = beer_file.getJSONArray("fermentationTimes");
+        for (int i = 0; i < arr2.length(); i++) {
+            JSONObject json = arr2.getJSONObject(i);
+            beer.fermentationTimes.add(new Ingredient(json.getString("name"),
+                    Float.parseFloat(json.getString("quantity")),
+                    Long.parseLong(json.getString("time")),
+                    Float.parseFloat(json.getString("temp"))));
+        }
+        return beer;
     }
 
     public void addMalt(String name, float quantity) {

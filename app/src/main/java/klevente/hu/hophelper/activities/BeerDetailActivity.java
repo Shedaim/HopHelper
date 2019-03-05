@@ -42,31 +42,29 @@ import klevente.hu.hophelper.fragments.BeerDetailsMashingFragment;
 import klevente.hu.hophelper.R;
 import klevente.hu.hophelper.data.Beer;
 import klevente.hu.hophelper.data.BeerList;
+import klevente.hu.hophelper.google_drive.DriveComplex;
 import klevente.hu.hophelper.google_drive.DriveServiceHelper;
 import klevente.hu.hophelper.services.BoilingCountdownService;
 import klevente.hu.hophelper.services.MashingCountdownService;
 
 public class BeerDetailActivity extends AppCompatActivity {
     private static final int EDIT_BEER = 101;
-    private static final int REQUEST_CODE_SIGN_IN = 1;
-    private static final int REQUEST_CODE_OPEN_DOCUMENT = 2;
     public static final String BEER_INDEX = "index";
 
     String TAG = "BeerDetail";
     String fileName, fileContent;
-    FileList file_list;
     boolean duplicate_file;
     ViewPager viewPager;
+    private String mFolderId = MainActivity.folderID;
     private Beer beer;
     private int beerIdx;
-    private DriveServiceHelper mDriveServiceHelper;
-    private volatile String mOpenFileId;
+    private DriveServiceHelper mDriveServiceHelper = MainActivity.mDriveServiceHelper;
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        requestSignIn();
+        //requestSignIn();
     }
 
     @Override
@@ -95,49 +93,9 @@ public class BeerDetailActivity extends AppCompatActivity {
         toolbar.setTitle(beer.name);
     }
 
-    private void requestSignIn() {
-        Log.d(TAG, "Requesting sign-in");
-        GoogleSignInOptions signInOptions =
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestEmail()
-                        .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
-                        .build();
-        GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
-        // The result of the sign-in Intent is handled in onActivityResult.
-        startActivityForResult(client.getSignInIntent(), REQUEST_CODE_SIGN_IN);
-    }
-
     /**
-     * Handles the {@code result} of a completed sign-in activity initiated from {@link
-     * #requestSignIn()}.
-     */
-    private void handleSignInResult(Intent result) {
-        GoogleSignIn.getSignedInAccountFromIntent(result)
-                .addOnSuccessListener(googleAccount -> {
-                    Log.d(TAG, "Signed in as " + googleAccount.getEmail());
-
-                    // Use the authenticated account to sign in to the Drive service.
-                    GoogleAccountCredential credential =
-                            GoogleAccountCredential.usingOAuth2(
-                                    this, Collections.singleton(DriveScopes.DRIVE_FILE));
-                    credential.setSelectedAccount(googleAccount.getAccount());
-                    Drive googleDriveService =
-                            new Drive.Builder(
-                                    AndroidHttp.newCompatibleTransport(),
-                                    new GsonFactory(),
-                                    credential)
-                                    .setApplicationName("HopHelper")
-                                    .build();
-                    // The DriveServiceHelper encapsulates all REST API and SAF functionality.
-                    // Its instantiation is required before handling any onClick actions.
-                    mDriveServiceHelper = new DriveServiceHelper(googleDriveService);
-                })
-                .addOnFailureListener(exception -> Log.e(TAG, "Unable to sign in.", exception));
-    }
-
-    /**
-     * Opens the Storage Access Framework file picker using {@link #REQUEST_CODE_OPEN_DOCUMENT}.
-     */
+     * Opens the Storage Access Framework file picker using {@link }.
+     *
     private void openFilePicker() {
         if (mDriveServiceHelper != null) {
             Log.d(TAG, "Opening file picker.");
@@ -151,7 +109,7 @@ public class BeerDetailActivity extends AppCompatActivity {
 
     /**
      * Opens a file from its {@code uri} returned from the Storage Access Framework file picker
-     * initiated by {@link #openFilePicker()}.
+     * initiated by {@link ()}.
 
     private void openFileFromFilePicker(Uri uri) {
         if (mDriveServiceHelper != null) {
@@ -173,232 +131,8 @@ public class BeerDetailActivity extends AppCompatActivity {
         }
     }
      */
-     private void createAndSaveFile(final String fileName, final String fileContent) {
-         if (mDriveServiceHelper != null && fileName != null && fileContent != null) {
-             mDriveServiceHelper.createFile()
-                     .addOnSuccessListener(fileId -> mDriveServiceHelper.saveFile(fileId, fileName, fileContent)
-                             .addOnSuccessListener(name -> Snackbar.make(viewPager, getString(R.string.successful_save, name), Snackbar.LENGTH_SHORT).show())
-                             .addOnFailureListener(exception -> {
-                                 Log.e(TAG, "Unable to save file to Drive.", exception);
-                                 Snackbar.make(viewPager, getString(R.string.failed_to_save, fileName), Snackbar.LENGTH_SHORT).show();
-                             })
-                     )
-                     .addOnFailureListener(exception -> {
-                         Log.e(TAG, "Unable to create a new file.", exception);
-                         Snackbar.make(viewPager, getString(R.string.failed_to_save, fileName), Snackbar.LENGTH_SHORT).show();
-                     });
-         }
-     }
-    /**
-     * Saves a beer object into a new json file
-     * @param fileName
-     * @param fileContent
-     */
-    private void saveBeerToFile(final String fileName, final String fileContent) {
-        if (mDriveServiceHelper != null && fileName != null && fileContent != null) {
-            Log.d(TAG, "Querying existing files");
-            mDriveServiceHelper.queryFiles()
-                .addOnSuccessListener(fileList -> {
-                    for(File f : fileList.getFiles()){
-                        if (f.getName().equals(fileName)){
-                            Log.d(TAG, "Found exiting file with the same name");
-                            duplicate_file = true;
-                            final Dialog dialog = new Dialog(BeerDetailActivity.this);
-                            dialog.setContentView(R.layout.save_file_dialog);
-                            dialog.setTitle("Save File to Drive...");
-
-                            Button saveAndReplace = dialog.findViewById(R.id.btn_save_and_replace);
-                            Button saveAndKeep = dialog.findViewById(R.id.btn_save_and_keep);
-                            Button cancel = dialog.findViewById(R.id.btn_cancel);
-
-                            saveAndReplace.setOnClickListener(v1 -> {
-                                dialog.dismiss();
-                                mDriveServiceHelper.saveFile(f.getId(), fileName, fileContent)
-                                    .addOnSuccessListener(name -> Snackbar.make(viewPager, getString(R.string.successful_save, name), Snackbar.LENGTH_SHORT).show())
-                                    .addOnFailureListener(exception -> {
-                                        Log.e(TAG, "Unable to save file to Drive.", exception);
-                                        Snackbar.make(viewPager, getString(R.string.failed_to_save, fileName), Snackbar.LENGTH_SHORT).show();
-                                    });
-                            });
-
-                            saveAndKeep.setOnClickListener(v1 -> {
-                                dialog.dismiss();
-                                Time now = new Time();
-                                now.setToNow();
-                                createAndSaveFile(fileName + now.toString(), fileContent);
-                            });
-
-                            cancel.setOnClickListener(v1 -> {
-                                dialog.dismiss();
-                                Snackbar.make(viewPager, "Save to drive canceled by user", Snackbar.LENGTH_SHORT).show();
-                            });
-
-                            dialog.show();
-                            break;
-                        }
-                    }
-                    if (!duplicate_file){
-                        createAndSaveFile(fileName, fileContent);
-                    }
-                });
-            }
-    }
-
-    /**
-     * Saves the currently opened file created via {@link #createFile()} if one exists.
-     */
-    private void saveFile(String fileName, String fileContent) {
-        if (mDriveServiceHelper != null && fileName != null && fileContent != null) {
-            Log.d(TAG, "Saving " + mOpenFileId);
-            mDriveServiceHelper.saveFile(mOpenFileId, fileName, fileContent)
-                    .addOnFailureListener(exception ->
-                            Log.e(TAG, "Unable to save file via REST.", exception));
-        }
-    }
-
-    /**
-     * Queries the Drive REST API for files visible to this app and lists them in the content view.
-     */
-    private void query() {
-        if (mDriveServiceHelper != null) {
-            Log.d(TAG, "Querying for files.");
-            mDriveServiceHelper.queryFiles()
-                    .addOnSuccessListener(fileList -> file_list = fileList)
-                    .addOnFailureListener(exception -> Log.e(TAG, "Unable to query files.", exception));
-        }
-    }
-
-    /**
-     * Retrieves the title and content of a file identified by {@code fileId} and populates the UI.
-     */
-    private void readFile(String fileId) {
-        if (mDriveServiceHelper != null) {
-            Log.d(TAG, "Reading file " + fileId);
-
-            mDriveServiceHelper.readFile(fileId)
-                    .addOnSuccessListener(nameAndContent -> {
-                        fileName = nameAndContent.first;
-                        fileContent = nameAndContent.second;
-                        mOpenFileId = fileId;
-                    })
-                    .addOnFailureListener(exception ->
-                            Log.e(TAG, "Couldn't read file.", exception));
-        }
-    }
-
-    /**
-     * Creates a new file via the Drive REST API.
-     */
-    private void createFile() {
-        if (mDriveServiceHelper != null) {
-            Log.d(TAG, "Creating a file.");
-            mDriveServiceHelper.createFile()
-                    .addOnSuccessListener(this::readFile)
-                    .addOnFailureListener(exception ->
-                            Log.e(TAG, "Couldn't create file.", exception));
-        }
-    }
-
-    /**
-     * Updates the UI to read-only mode.
-     */
-    private void setReadOnlyMode() {
-        //mFileTitleEditText.setEnabled(false);
-        //mDocContentEditText.setEnabled(false);
-        mOpenFileId = null;
-    }
-
-    /**
-     * Updates the UI to read/write mode on the document identified by {@code fileId}.
-     */
-    private void setReadWriteMode(String fileId) {
-        //mFileTitleEditText.setEnabled(true);
-        //mDocContentEditText.setEnabled(true);
-        mOpenFileId = fileId;
-    }
-    /*
-    private void signIn() {
-        Set<Scope> requiredScopes = new HashSet<>(2);
-        requiredScopes.add(Drive.SCOPE_FILE);
-        requiredScopes.add(Drive.SCOPE_APPFOLDER);
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if (signInAccount != null && signInAccount.getGrantedScopes().containsAll(requiredScopes)) {
-            initializeDriveClient(signInAccount);
-        } else {
-            GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestScopes(Drive.SCOPE_FILE).requestScopes(Drive.SCOPE_APPFOLDER).build();
-            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, signInOptions);
-            startActivityForResult(googleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
-        }
-    }
-
-    private void initializeDriveClient(GoogleSignInAccount signInAccount) {
-        driveClient = Drive.getDriveClient(getApplicationContext(), signInAccount);
-        driveResourceClient = Drive.getDriveResourceClient(getApplicationContext(), signInAccount);
-    }
-    private void createFileInFolder(final DriveFolder parent) {
-        driveResourceClient
-                .createContents()
-                .continueWithTask(task -> {
-                    DriveContents contents = task.getResult();
-                    OutputStream outputStream = contents.getOutputStream();
-                    try (Writer writer = new OutputStreamWriter(outputStream)) {
-                        writeContents(writer);
-                    }
-
-                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                            .setTitle(beer.name + ".txt")
-                            .setMimeType("text/plain")
-                            .build();
-
-                    return driveResourceClient.createFile(parent, changeSet, contents);
-                })
-                .addOnSuccessListener(this,
-                        driveFile -> showMessage(getString(R.string.file_created)))
-                .addOnFailureListener(this, e -> {
-                    showMessage(getString(R.string.unable));
-                });
-    }
-
-    */
 
 
-    /*
-    protected void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
-
-    private Task<DriveId> pickItem(OpenFileActivityOptions openOptions) {
-        openItemTaskSource = new TaskCompletionSource<>();
-        driveClient
-                .newOpenFileActivityIntentSender(openOptions)
-                .continueWith((Continuation<IntentSender, Void>) task -> {
-                    startIntentSenderForResult(
-                            task.getResult(), REQUEST_CODE_OPEN_ITEM, null, 0, 0, 0);
-                    return null;
-                });
-        return openItemTaskSource.getTask();
-    }
-
-    private Task<DriveId> pickFolder() {
-        OpenFileActivityOptions openOptions =
-                new OpenFileActivityOptions.Builder()
-                        .setSelectionFilter(
-                                Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE))
-                        .setActivityTitle(getString(R.string.select_folder))
-                        .build();
-        return pickItem(openOptions);
-    }
-
-    private void exportToDrive() {
-        pickFolder().addOnSuccessListener(this, driveId -> {
-            createFileInFolder(driveId.asDriveFolder());
-        }).addOnFailureListener(this, e -> {
-        });
-    }
-
-*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_beer_detail, menu);
@@ -483,8 +217,8 @@ public class BeerDetailActivity extends AppCompatActivity {
         fabSaveToDrive.setOnClickListener(v -> {
             fileName = beer.name + ".json";
             Gson gson = new Gson();
-            String fileContent = gson.toJson(beer);
-            saveBeerToFile(fileName, fileContent);
+            fileContent = gson.toJson(beer);
+            DriveComplex.saveBeerToFile(mDriveServiceHelper, beer, fileName, mFolderId, fileContent, viewPager, TAG, BeerDetailActivity.this);
         });
     }
 
@@ -500,21 +234,6 @@ public class BeerDetailActivity extends AppCompatActivity {
                     result.putExtra("old_beer", data.getSerializableExtra("old_beer"));
                     setResult(Activity.RESULT_OK, result);
                     finish();
-                }
-                break;
-            case REQUEST_CODE_SIGN_IN:
-                Log.d(TAG, "ResultCode: " + String.valueOf(resultCode) + " Result_OK: " + String.valueOf(Activity.RESULT_OK) );
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    handleSignInResult(data);
-                }
-                break;
-
-            case REQUEST_CODE_OPEN_DOCUMENT:
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    Uri uri = data.getData();
-                    if (uri != null) {
-                        //openFileFromFilePicker(uri);
-                    }
                 }
                 break;
         }

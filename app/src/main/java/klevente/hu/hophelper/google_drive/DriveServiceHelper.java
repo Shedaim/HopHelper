@@ -23,12 +23,15 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.support.v4.util.Pair;
+
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +39,7 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
 
 /**
  * A utility for performing read/write operations on Drive files via the REST API and opening a
@@ -49,13 +53,28 @@ public class DriveServiceHelper {
         mDriveService = driveService;
     }
 
+    public Task<String> crateFolder(String folderName){
+        return Tasks.call(mExecutor, () -> {
+            File fileMetadata = new File()
+                .setName(folderName)
+                .setMimeType("application/vnd.google-apps.folder");
+
+            File file = mDriveService.files().create(fileMetadata)
+                    .setFields("id")
+                    .execute();
+            if (file == null) {
+                throw new IOException("Null result when requesting folder creation.");
+            }
+            return file.getId();
+        });
+    }
     /**
      * Creates a text file in the user's My Drive folder and returns its file ID.
      */
-    public Task<String> createFile() {
+    public Task<String> createFile(String folderId) {
         return Tasks.call(mExecutor, () -> {
             File metadata = new File()
-                    .setParents(Collections.singletonList("root"))
+                    .setParents(Collections.singletonList(folderId))
                     .setMimeType("text/plain")
                     .setName("Untitled file");
 
@@ -95,6 +114,27 @@ public class DriveServiceHelper {
     }
 
     /**
+     * Returns a {@link FileList} containing all the visible files in the user's My Drive.
+     *
+     * <p>The returned list will only contain files visible to this app, i.e. those which were
+     * created by this app. To perform operations on files not created by the app, the project must
+     * request Drive Full Scope in the <a href="https://play.google.com/apps/publish">Google
+     * Developer's Console</a> and be submitted to Google for verification.</p>
+     */
+    public Task<FileList> queryFiles() {
+        return Tasks.call(mExecutor, () ->
+                mDriveService.files().list().setSpaces("drive").execute());
+    }
+
+    /**
+     * Deletes the file identified by {@code fileId}
+     */
+    public Task<Void> deleteFile(String fileId) {
+        return Tasks.call(mExecutor, () -> // Update the metadata and contents.
+            mDriveService.files().delete(fileId).execute());
+    }
+
+    /**
      * Updates the file identified by {@code fileId} with the given {@code name} and {@code
      * content}.
      */
@@ -112,18 +152,7 @@ public class DriveServiceHelper {
         });
     }
 
-    /**
-     * Returns a {@link FileList} containing all the visible files in the user's My Drive.
-     *
-     * <p>The returned list will only contain files visible to this app, i.e. those which were
-     * created by this app. To perform operations on files not created by the app, the project must
-     * request Drive Full Scope in the <a href="https://play.google.com/apps/publish">Google
-     * Developer's Console</a> and be submitted to Google for verification.</p>
-     */
-    public Task<FileList> queryFiles() {
-        return Tasks.call(mExecutor, () ->
-                mDriveService.files().list().setSpaces("drive").execute());
-    }
+
 
     /**
      * Returns an {@link Intent} for opening the Storage Access Framework file picker.

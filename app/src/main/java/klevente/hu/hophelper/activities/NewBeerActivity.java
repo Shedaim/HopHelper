@@ -327,6 +327,7 @@ public class NewBeerActivity extends AppCompatActivity implements AdapterView.On
             if (isListsValid()) {
                 Beer beer = new Beer();
                 beer.name = nameEditText.getText().toString();
+                beer.version = 1;
                 beer.style = styleEditText.getText().toString();
                 beer.batchSize = Double.parseDouble(batchSizeEditText.getText().toString());
                 beer.description = descriptionEditText.getText().toString();
@@ -428,7 +429,6 @@ public class NewBeerActivity extends AppCompatActivity implements AdapterView.On
         switch (item.getItemId()) {
             case R.id.action_add:
                 if (newBeer != null) {
-
                     result.putExtra("beer", newBeer);
                     setResult(Activity.RESULT_OK, result);
                     finish();
