@@ -1,9 +1,8 @@
 package klevente.hu.hophelper.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -14,27 +13,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.Scope;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
-import com.google.api.services.drive.model.File;
-import com.google.api.services.drive.model.FileList;
-import com.google.gson.Gson;
-import java.util.Collections;
+
+
 import klevente.hu.hophelper.fragments.BeerDetailIngrendientsFragment;
 import klevente.hu.hophelper.fragments.BeerDetailsBoilingFragment;
 import klevente.hu.hophelper.fragments.BeerDetailsFermentationFragment;
@@ -52,10 +38,7 @@ public class BeerDetailActivity extends AppCompatActivity {
     public static final String BEER_INDEX = "index";
 
     String TAG = "BeerDetail";
-    String fileName, fileContent;
-    boolean duplicate_file;
     ViewPager viewPager;
-    private String mFolderId = MainActivity.folderID;
     private Beer beer;
     private int beerIdx;
     private DriveServiceHelper mDriveServiceHelper = MainActivity.mDriveServiceHelper;
@@ -64,7 +47,6 @@ public class BeerDetailActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //requestSignIn();
     }
 
     @Override
@@ -93,46 +75,6 @@ public class BeerDetailActivity extends AppCompatActivity {
         toolbar.setTitle(beer.name);
     }
 
-    /**
-     * Opens the Storage Access Framework file picker using {@link }.
-     *
-    private void openFilePicker() {
-        if (mDriveServiceHelper != null) {
-            Log.d(TAG, "Opening file picker.");
-
-            Intent pickerIntent = mDriveServiceHelper.createFilePickerIntent();
-
-            // The result of the SAF Intent is handled in onActivityResult.
-            startActivityForResult(pickerIntent, REQUEST_CODE_OPEN_DOCUMENT);
-        }
-    }
-
-    /**
-     * Opens a file from its {@code uri} returned from the Storage Access Framework file picker
-     * initiated by {@link ()}.
-
-    private void openFileFromFilePicker(Uri uri) {
-        if (mDriveServiceHelper != null) {
-            Log.d(TAG, "Opening " + uri.getPath());
-
-            mDriveServiceHelper.openFileUsingStorageAccessFramework(getContentResolver(), uri)
-                    .addOnSuccessListener(nameAndContent -> {
-                        String name = nameAndContent.first;
-                        String content = nameAndContent.second;
-
-                        // Files opened through SAF cannot be modified, except by retrieving the
-                        // fileId from its metadata and updating it via the REST API. To modify
-                        // files not created by your app, you will need to request the Drive
-                        // Full Scope and submit your app to Google for review.
-                        setReadOnlyMode();
-                    })
-                    .addOnFailureListener(exception ->
-                            Log.e(TAG, "Unable to open file from picker.", exception));
-        }
-    }
-     */
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_beer_detail, menu);
@@ -148,7 +90,6 @@ public class BeerDetailActivity extends AppCompatActivity {
             default: return super.onOptionsItemSelected(item);
         }
     }
-
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -173,6 +114,7 @@ public class BeerDetailActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void initFabs() {
         FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
         FloatingActionButton fabEdit = findViewById(R.id.fabBeerDetailEdit);
@@ -215,10 +157,8 @@ public class BeerDetailActivity extends AppCompatActivity {
         });
 
         fabSaveToDrive.setOnClickListener(v -> {
-            fileName = beer.name + ".json";
-            Gson gson = new Gson();
-            fileContent = gson.toJson(beer);
-            DriveComplex.saveBeerToFile(mDriveServiceHelper, beer, fileName, mFolderId, fileContent, viewPager, TAG, BeerDetailActivity.this);
+            Log.d(TAG, "Saving file " + MainActivity.folderID);
+            DriveComplex.saveBeerToFile(mDriveServiceHelper, beer, MainActivity.folderID, viewPager, TAG, BeerDetailActivity.this);
         });
     }
 

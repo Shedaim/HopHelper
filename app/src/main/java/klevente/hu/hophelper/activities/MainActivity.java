@@ -3,6 +3,7 @@ package klevente.hu.hophelper.activities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -53,8 +54,8 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
     private static final int REQUEST_CODE_SIGN_IN = 1;
 
     public static DriveServiceHelper mDriveServiceHelper;
-    private MainBeerAdapter adapter;
-    private HopHelperDatabase database;
+    public MainBeerAdapter adapter;
+    public static HopHelperDatabase database;
     String TAG = "main";
     public static String folderID;
     SharedPreferences sharedPref;
@@ -135,34 +136,11 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
                     // The DriveServiceHelper encapsulates all REST API and SAF functionality.
                     // Its instantiation is required before handling any onClick actions.
                     mDriveServiceHelper = new DriveServiceHelper(googleDriveService);
+
                     // Check if a root folder exists - if not, create one with default name
                     folderID = sharedPref.getString("root_folder", null);
-                    if (folderID == null) mDriveServiceHelper.crateFolder(getString(R.string.app_name))
-                    .addOnSuccessListener(folderId -> {
-                        folderID = folderId;
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("root_folder", folderID);
-                        editor.apply();
-                    })
-                    .addOnFailureListener(exception -> Log.d(TAG, "Could not create root folder " + exception));
-
-                    else {
-                        final Boolean[] found_root_folder = {false};
-                        mDriveServiceHelper.queryFiles()
-                            .addOnSuccessListener(fileList -> {
-                                for (File f: fileList.getFiles()){
-                                    if (f.getId().equals(folderID)) found_root_folder[0] = true;
-                                }
-                                if (found_root_folder[0].equals(false)) mDriveServiceHelper.crateFolder(getString(R.string.app_name))
-                                    .addOnSuccessListener(folderId -> {
-                                        folderID = folderId;
-                                        SharedPreferences.Editor editor = sharedPref.edit();
-                                        editor.putString("root_folder", folderID);
-                                        editor.apply();
-                                    })
-                                    .addOnFailureListener(exception -> Log.d(TAG, "Could not create root folder " + exception));
-                            });
-                    }
+                    Log.d(TAG, "folderID from shared = " + folderID);
+                    if (folderID == null) getRootDirFromDrive();
                 })
                 .addOnFailureListener(exception -> Log.e(TAG, "Unable to sign in.", exception))
                 .addOnCompleteListener(a -> loadDriveBeers());
@@ -183,15 +161,7 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
             if (resultCode == RESULT_OK) {
                 assert data != null;
                 Beer newBeer = (Beer) data.getSerializableExtra("beer");
-                String fileName = newBeer.name + ".json";
-                Gson gson = new Gson();
-                String fileContent = gson.toJson(newBeer);
-                DriveComplex.saveBeerToFile(mDriveServiceHelper, newBeer, fileName, folderID, fileContent, recyclerView, TAG, MainActivity.this)
-                    .addOnSuccessListener(fileID -> {
-                        newBeer.file_id = fileID;
-                        onNewBeerCreated(newBeer);
-                    })
-                    .addOnFailureListener(fileID -> Log.d(TAG, "Failed to Save new beer to Drive"));
+                DriveComplex.saveBeerToFile(mDriveServiceHelper, newBeer, folderID, recyclerView, TAG, MainActivity.this);
             }
             break;
         case EDIT_BEER:
@@ -231,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
     @Override
     public void onItemClick(int index) {
         if(DELETE){
+            Log.d(TAG, "Trying to delete file with ID = " + BeerList.get(index).file_id);
             mDriveServiceHelper.deleteFile(BeerList.get(index).file_id)
                     .addOnSuccessListener(a -> onBeerDelete(BeerList.get(index)))
                     .addOnFailureListener(exception -> Log.d(TAG, "Could not delete file from Drive " + exception));
@@ -273,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
                                     .addOnSuccessListener(content -> {
                                         try {
                                             Log.d(TAG, "Adding file " + f.getName() + " to database and updating adapter");
-                                            Beer beer = Beer.fileToBeer(content.second);
+                                            Beer beer = Beer.fileToBeer(f.getId(), content.second);
                                             onNewBeerCreated(beer);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -353,9 +324,7 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
             @Override
             protected Beer doInBackground(Void... voids) {
                 database.beerDao().delete(beer);
-                List<Beer> all = database.beerDao().getAll();
-                Beer withId = all.get(all.size()-1);
-                return withId;
+                return beer;
             }
 
             @Override
@@ -364,5 +333,47 @@ public class MainActivity extends AppCompatActivity implements MainBeerAdapter.B
             }
         }.execute();
         recreate();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void getRootDirFromDrive() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                mDriveServiceHelper.queryFiles()
+                    .addOnSuccessListener(fileList -> {
+                        for (File f : fileList.getFiles()) {
+                            //Go over all folders
+                            if (!f.getMimeType().equals("application/vnd.google-apps.folder"))
+                                continue;
+                            if (f.getName().equals(getString(R.string.app_name))) {
+                                folderID = f.getId();
+
+                                SharedPreferences sharedPref;
+                                SharedPreferences.Editor editor;
+                                sharedPref = getSharedPreferences("settings",MODE_PRIVATE);
+                                editor = sharedPref.edit();
+
+                                // If can't get a root folder, create one.
+                                // TODO - Add option for user to create or choose existing one.
+                                if (folderID == null){
+                                    mDriveServiceHelper.crateFolder(getString(R.string.app_name))
+                                        .addOnSuccessListener(folderId -> {
+                                            folderID = folderId;
+                                            editor.putString("root_folder", folderID);
+                                            editor.apply();
+                                        })
+                                        .addOnFailureListener(exception -> Log.d(TAG, "Could not create root folder " + exception));
+                                }
+                                else editor.putString("root_folder", folderID);
+                                editor.apply();
+                                break;
+                            }
+                        }
+                    });
+                Log.d(TAG, "returning from doInBackground " + folderID);
+                return folderID;
+            }
+        }.execute();
     }
 }

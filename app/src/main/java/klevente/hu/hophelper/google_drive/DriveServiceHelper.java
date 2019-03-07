@@ -187,12 +187,12 @@ public class DriveServiceHelper {
             String content;
             try (InputStream is = contentResolver.openInputStream(uri);
                  BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-                content = stringBuilder.toString();
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        stringBuilder.append(line);
+                    }
+                    content = stringBuilder.toString();
             }
 
             return Pair.create(name, content);

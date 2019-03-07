@@ -109,7 +109,7 @@ public class Beer implements Serializable {
         this.batchSize = batchSize;
     }
 
-    public static Beer fileToBeer(String content) throws JSONException {
+    public static Beer fileToBeer(String file_id, String content) throws JSONException {
         JSONObject beer_file = new JSONObject(content);
         Beer beer = new Beer();
         beer.name = beer_file.getString("name");
@@ -121,6 +121,7 @@ public class Beer implements Serializable {
         beer.og = Integer.valueOf(beer_file.getString("og"));
         beer.fg = Integer.valueOf(beer_file.getString("fg"));
         beer.yeast = beer_file.getString("yeast");
+        beer.file_id = file_id;
 
         JSONObject arr;
         arr = beer_file.getJSONObject("malts");
